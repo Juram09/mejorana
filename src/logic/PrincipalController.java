@@ -72,7 +72,8 @@ public class PrincipalController implements Initializable {
                 AnchorPane anchorPane = fxmlLoader.load();
 
                 OneCarCardController onecarcardcontroller=fxmlLoader.getController();
-                onecarcardcontroller.setData(cars.get(i),dao.getImage(cars.get(i).getPlaca()));
+                cars.get(i).setImgs(dao.getImages(cars.get(i).getPlaca()));
+                onecarcardcontroller.setData(cars.get(i));
                 if (column==3){
                     column=0;
                     row++;

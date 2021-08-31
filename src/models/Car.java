@@ -12,7 +12,7 @@ public class Car {
     private String conductor;
     private Images imgs;
 
-    public Car(String placa, long km, String color, String marca, int modelo, String chasis, int capacidad, String tipo, String conductor) {
+    public Car(String placa, long km, String color, String marca, int modelo, String chasis, int capacidad, String tipo, String conductor,Images imgs) {
         this.placa = placa;
         this.km = km;
         this.color = color;
@@ -22,6 +22,7 @@ public class Car {
         this.capacidad = capacidad;
         this.tipo = tipo;
         this.conductor = conductor;
+        this.imgs=imgs;
     }
 
     public Car() {
@@ -97,5 +98,13 @@ public class Car {
 
     public void setConductor(String conductor) {
         this.conductor = conductor;
+    }
+
+    public Images getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(Images imgs) {
+        this.imgs = imgs;
     }
 }

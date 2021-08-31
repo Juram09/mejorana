@@ -53,6 +53,7 @@ public class carDAO {
                 car.setChasis(data.getString("chasis"));
                 car.setCapacidad(data.getInt("capacidad"));
                 car.setTipo(data.getString("tipo"));
+                car.setImgs(getImages(placa));
             }
             data.close();
             statement.close();
@@ -62,22 +63,9 @@ public class carDAO {
         }
         return car;
     }
-    public String getImage(String placa){
-        String sql="SELECT frontal FROM imagenes WHERE placa=?;";
-        String image="no";
-        try{
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, placa);
-            ResultSet data=statement.executeQuery();
-            while(data.next()){
-                image=(data.getString("frontal"));
-            }
-            data.close();
-            statement.close();
-        }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public Images getImages(String placa){
+        imagesDAO img = new imagesDAO();
+        Images image = img.getOne(placa);
         return image;
     }
     public void insert(Car car) {
@@ -131,5 +119,23 @@ public class carDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+    public String getConductor(String placa){
+        String sql="SELECT conductor FROM car WHERE placa=?;";
+        String conductor=null;
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            ResultSet data=statement.executeQuery();
+            while(data.next()){
+                conductor=data.getString("conductor");
+            }
+            data.close();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return conductor;
     }
 }

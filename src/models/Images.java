@@ -15,6 +15,9 @@ public class Images {
         this.cabin = cabin;
     }
 
+    public Images() {
+    }
+
     public String getFrontal() {
         return frontal;
     }

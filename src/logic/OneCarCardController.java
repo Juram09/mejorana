@@ -1,14 +1,21 @@
 package logic;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.Car;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 
@@ -31,35 +38,43 @@ public class OneCarCardController {
     @FXML
     private Circle circle;
 
+    private Car car;
+
     @FXML
     void editCar(ActionEvent event) {
 
     }
 
     @FXML
-    void viewCar(ActionEvent event) {
-        System.out.println(placaLabel);
+    void viewCar(ActionEvent event) throws IOException{
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/oneCar.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        OneCarController controller=fxmlLoader.getController();
+        controller.setCar(placaLabel.getText());
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root,1280,720);
+        stage.setScene(scene);
+        stage.setTitle ("La mejorana");
+        stage.setResizable(false);
+        stage.show();
     }
 
-    private Car car;
-
-    public void setData(Car car,String image){
-        System.out.println(car.getPlaca());
+    public void setData(Car car){
         this.car=car;
         placaLabel.setText(car.getPlaca());
         kmLabel.setText(String.valueOf(car.getKm()));
         tipoLabel.setText(car.getTipo());
         Image img;
-        if(image=="no"){
+        if(car.getImgs().getFrontal()==null){
             img=new Image("imgs/NOT.jpg");
         }else{
-            img=getImage(image);
+            img=getImage(car.getImgs().getFrontal());
         }
         circle.setFill(new ImagePattern(img));
     }
-    public void setNew(){
 
-    }
     private Image getImage(String image){
         try{
             String imageDataBytes = image.substring(image.indexOf(",")+1);

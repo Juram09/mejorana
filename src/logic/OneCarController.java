@@ -1,12 +1,30 @@
 package logic;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.ImagePattern;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import models.*;
 
-public class OneCarController {
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Base64;
+import java.util.ResourceBundle;
+
+public class OneCarController{
 
     @FXML
     private ImageView carImg;
@@ -75,10 +93,10 @@ public class OneCarController {
     private Label modeloLabel;
 
     @FXML
-    private Label capacidadLabel;
+    private Label chasisLabel;
 
     @FXML
-    private Label placasLabel6;
+    private Label capacidadLabel;
 
     @FXML
     private Label tipoLabel;
@@ -107,6 +125,10 @@ public class OneCarController {
     @FXML
     private Label licenseLabel;
 
+    private Car car;
+    private String placa;
+    private Conductor conductor;
+
     @FXML
     void addControl(ActionEvent event) {
 
@@ -124,12 +146,22 @@ public class OneCarController {
 
     @FXML
     void exit(ActionEvent event) {
-
+        Platform.exit();
+        System.exit(0);
     }
 
     @FXML
-    void goBack(ActionEvent event) {
-
+    void goBack(ActionEvent event) throws IOException {
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principal.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root,1280,720);
+        stage.setScene(scene);
+        stage.setTitle ("La mejorana");
+        stage.setResizable(false);
+        stage.show();
     }
 
     @FXML
@@ -164,27 +196,65 @@ public class OneCarController {
 
     @FXML
     void showBack(ActionEvent event) {
-
+        show(this.car.getImgs().getTrasera());
     }
 
     @FXML
     void showCabin(ActionEvent event) {
-
+        show(this.car.getImgs().getCabin());
     }
 
     @FXML
     void showFrontal(ActionEvent event) {
-
+        show(this.car.getImgs().getFrontal());
     }
 
     @FXML
     void showLeft(ActionEvent event) {
-
+        show(this.car.getImgs().getLatIzq());
     }
 
     @FXML
     void showRight(ActionEvent event) {
+        show(this.car.getImgs().getLatDer());
+    }
 
+    public void setCar(String placa){
+        this.placa=placa;
+        carDAO dao=new carDAO();
+        conductorDAO cdao=new conductorDAO();
+        this.car=dao.getOne(this.placa);
+        placasLabel.setText(this.placa);
+        kmLabel.setText(String.valueOf(car.getKm()));
+        colorLabel.setText(String.valueOf(car.getColor()));
+        marcaLabel.setText(String.valueOf(car.getMarca()));
+        modeloLabel.setText(String.valueOf(car.getModelo()));
+        chasisLabel.setText(String.valueOf(car.getChasis()));
+        capacidadLabel.setText(String.valueOf(car.getCapacidad()));
+        tipoLabel.setText(car.getTipo());
+        this.conductor=cdao.getOne(dao.getConductor(this.placa));
+        nitLabel.setText(String.valueOf(conductor.getNit()));
+        nameLabel.setText(String.valueOf(conductor.getNombre()));
+        lastnameLabel.setText(String.valueOf(conductor.getApellido()));
+        phoneLabel.setText(String.valueOf(conductor.getTelefono()));
+        licenseLabel.setText(String.valueOf(conductor.getLicencia()));
+        show(car.getImgs().getFrontal());
+    }
+    private void show(String image){
+        Image img;
+        try{
+            if (image==null){
+                img=new Image("imgs/NOT.jpg");
+            }else{
+                String imageDataBytes = image.substring(image.indexOf(",")+1);
+                InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageDataBytes.getBytes()));
+                img= new Image(stream);
+            }
+            carImg.setImage(img);
+        }
+        catch (Exception e) {
+
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -9,34 +10,98 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.OneCarController">
    <children>
-      <ImageView fx:id="carImg" fitHeight="373.0" fitWidth="499.0" layoutX="106.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="carImg" fitHeight="373.0" fitWidth="489.0" layoutX="106.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="282.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="685.0" AnchorPane.topAnchor="65.0" />
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/car.png" />
          </image>
       </ImageView>
-      <Button fx:id="editButton" layoutX="-1.0" layoutY="111.0" mnemonicParsing="false" onAction="#goEdit" opacity="0.01" prefHeight="94.0" prefWidth="89.0" />
-      <Button fx:id="addControlButton" layoutX="-1.0" layoutY="208.0" mnemonicParsing="false" onAction="#addControl" opacity="0.01" prefHeight="103.0" prefWidth="89.0" />
-      <Button fx:id="editDocumentsButton" layoutY="313.0" mnemonicParsing="false" onAction="#editDocuments" opacity="0.01" prefHeight="103.0" prefWidth="89.0" />
-      <Button fx:id="addMantButton" layoutY="423.0" mnemonicParsing="false" onAction="#addMant" opacity="0.01" prefHeight="103.0" prefWidth="89.0" />
-      <Button fx:id="showFrontalButton" layoutX="615.0" layoutY="75.0" mnemonicParsing="false" onAction="#showFrontal" opacity="0.01" prefHeight="115.0" prefWidth="134.0" />
-      <Button fx:id="showBackButton" layoutX="755.0" layoutY="75.0" mnemonicParsing="false" onAction="#showBack" opacity="0.01" prefHeight="115.0" prefWidth="134.0" />
-      <Button fx:id="showRightButton" layoutX="615.0" layoutY="198.0" mnemonicParsing="false" onAction="#showRight" opacity="0.01" prefHeight="115.0" prefWidth="134.0" />
-      <Button fx:id="showLeftButton" layoutX="755.0" layoutY="198.0" mnemonicParsing="false" onAction="#showLeft" opacity="0.01" prefHeight="115.0" prefWidth="134.0" />
-      <Button fx:id="showCabinButton" layoutX="688.0" layoutY="315.0" mnemonicParsing="false" onAction="#showCabin" opacity="0.01" prefHeight="115.0" prefWidth="134.0" />
-      <Button fx:id="seeCardButton" layoutX="823.0" layoutY="503.0" mnemonicParsing="false" onAction="#seeCard" opacity="0.01" prefHeight="45.0" prefWidth="70.0" />
-      <Button fx:id="seeSoatButton" layoutX="823.0" layoutY="550.0" mnemonicParsing="false" onAction="#seeSoat" opacity="0.01" prefHeight="45.0" prefWidth="70.0" />
-      <Button fx:id="goBackButton" layoutX="1147.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBack" opacity="0.01" prefHeight="52.0" prefWidth="50.0" />
-      <Button fx:id="seeTecnoButton" layoutX="823.0" layoutY="598.0" mnemonicParsing="false" onAction="#seeTecno" opacity="0.01" prefHeight="45.0" prefWidth="70.0" />
-      <Button fx:id="seeOtherButton" layoutX="823.0" layoutY="645.0" mnemonicParsing="false" onAction="#seeOther" opacity="0.01" prefHeight="45.0" prefWidth="70.0" />
-      <Button fx:id="exitButton" layoutX="1216.0" layoutY="7.0" mnemonicParsing="false" onAction="#exit" opacity="0.01" prefHeight="52.0" prefWidth="50.0" />
-      <Button fx:id="goMenuButton" layoutY="-2.0" mnemonicParsing="false" onAction="#goMenu" opacity="0.01" prefHeight="76.0" prefWidth="208.0" />
+      <Button fx:id="editButton" layoutX="-1.0" layoutY="111.0" mnemonicParsing="false" onAction="#goEdit" opacity="0.01" prefHeight="94.0" prefWidth="89.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="addControlButton" layoutX="-1.0" layoutY="208.0" mnemonicParsing="false" onAction="#addControl" opacity="0.01" prefHeight="103.0" prefWidth="89.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="editDocumentsButton" layoutY="313.0" mnemonicParsing="false" onAction="#editDocuments" opacity="0.01" prefHeight="103.0" prefWidth="89.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="addMantButton" layoutY="423.0" mnemonicParsing="false" onAction="#addMant" opacity="0.01" prefHeight="103.0" prefWidth="89.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="showFrontalButton" layoutX="615.0" layoutY="75.0" mnemonicParsing="false" onAction="#showFrontal" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="showBackButton" layoutX="755.0" layoutY="75.0" mnemonicParsing="false" onAction="#showBack" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="showRightButton" layoutX="615.0" layoutY="198.0" mnemonicParsing="false" onAction="#showRight" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="showLeftButton" layoutX="755.0" layoutY="198.0" mnemonicParsing="false" onAction="#showLeft" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="showCabinButton" layoutX="688.0" layoutY="315.0" mnemonicParsing="false" onAction="#showCabin" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="seeCardButton" layoutX="823.0" layoutY="503.0" mnemonicParsing="false" onAction="#seeCard" opacity="0.01" prefHeight="45.0" prefWidth="70.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="seeSoatButton" layoutX="823.0" layoutY="550.0" mnemonicParsing="false" onAction="#seeSoat" opacity="0.01" prefHeight="45.0" prefWidth="70.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="goBackButton" layoutX="1147.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBack" opacity="0.01" prefHeight="52.0" prefWidth="50.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="seeTecnoButton" layoutX="823.0" layoutY="598.0" mnemonicParsing="false" onAction="#seeTecno" opacity="0.01" prefHeight="45.0" prefWidth="70.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="seeOtherButton" layoutX="823.0" layoutY="645.0" mnemonicParsing="false" onAction="#seeOther" opacity="0.01" prefHeight="45.0" prefWidth="70.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="exitButton" layoutX="1216.0" layoutY="7.0" mnemonicParsing="false" onAction="#exit" opacity="0.01" prefHeight="52.0" prefWidth="50.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="goMenuButton" layoutY="-2.0" mnemonicParsing="false" onAction="#goMenu" opacity="0.01" prefHeight="76.0" prefWidth="208.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
       <Label fx:id="placasLabel" layoutX="1117.0" layoutY="147.0">
          <font>
             <Font name="Century Gothic" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="kmLabel" layoutX="1036.0" layoutY="221.0">
+      <Label fx:id="kmLabel" layoutX="1037.0" layoutY="222.0">
          <font>
             <Font name="Century Gothic" size="18.0" />
          </font>
@@ -56,12 +121,12 @@
             <Font name="Century Gothic" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="capacidadLabel" layoutX="1030.0" layoutY="503.0">
+      <Label fx:id="chasisLabel" layoutX="1030.0" layoutY="503.0">
          <font>
             <Font name="Century Gothic" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="placasLabel6" layoutX="1129.0" layoutY="582.0">
+      <Label fx:id="capacidadLabel" layoutX="1129.0" layoutY="582.0">
          <font>
             <Font name="Century Gothic" size="18.0" />
          </font>
