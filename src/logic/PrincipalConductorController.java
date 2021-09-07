@@ -42,14 +42,23 @@ public class PrincipalConductorController implements Initializable{
     private Button carsButton;
 
     @FXML
-    private Button addCarButton;
+    private Button addConductorButton;
 
     @FXML
     private TextField searchtxt;
 
     @FXML
-    void addCar(ActionEvent event) {
-
+    void addConductor(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/addConductor.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root,1280,720);
+        stage.setScene(scene);
+        stage.setTitle ("La mejorana");
+        stage.setResizable(false);
+        stage.show();
+        ((Node)(event.getSource())).getScene().getWindow().hide();
     }
 
     @FXML
@@ -143,10 +152,15 @@ public class PrincipalConductorController implements Initializable{
                 }
                 grid.add(anchorPane,column++,row);
                 //set grid width
-                if (row<1){
-                    grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-                    grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                    grid.setMaxWidth(Region.USE_PREF_SIZE);
+                if (row<1 && column!=3){
+                    if (column==2){
+                        grid.setMinWidth(800);
+                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxWidth(Region.USE_PREF_SIZE);
+                    }else{
+                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxWidth(Region.USE_PREF_SIZE);}
                 }
                 else {
                     grid.setMinWidth(1200);

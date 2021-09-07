@@ -56,6 +56,8 @@ public class OneConductorCardController {
             img=new Image("imgs/NOTC.jpg");
         }else{
             img=getImage(conductor.getImagen());
+            if(img==null)
+                img=new Image("imgs/NOTC.jpg");
         }
         circle.setFill(new ImagePattern(img));
     }
@@ -68,6 +70,7 @@ public class OneConductorCardController {
             return img;
         }
         catch (Exception e) {
+            System.out.println("La imagen no se puede cargar");
             return null;
         }
     }

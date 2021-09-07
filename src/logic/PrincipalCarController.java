@@ -99,7 +99,7 @@ public class PrincipalCarController implements Initializable {
                     }
                     grid.add(anchorPane,column++,row);
                     //set grid width
-                    if (row<1){
+                    if (row<1 && column!=3){
                         if (column==2){
                             grid.setMinWidth(800);
                             grid.setPrefWidth(Region.USE_COMPUTED_SIZE);

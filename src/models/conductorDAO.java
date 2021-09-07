@@ -61,7 +61,7 @@ public class conductorDAO {
         return conductor;
     }
     public void insert(Conductor conductor) {
-        String sql="INSERT INTO conductor(nit, documento, nombre, apellido, telefono, licencia) VALUES (?, ?, ?, ?, ?, ?);";
+        String sql="INSERT INTO conductor(nit, documento, nombre, apellido, telefono, licencia,imagen) VALUES (?, ?, ?, ?, ?, ?, ?);";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, conductor.getNit());
@@ -70,6 +70,7 @@ public class conductorDAO {
             statement.setString(4, conductor.getApellido());
             statement.setLong(5, conductor.getTelefono());
             statement.setLong(6, conductor.getLicencia());
+            statement.setString(7, conductor.getImagen());
             statement.execute();
             statement.close();
         }catch(SQLException e){
@@ -78,7 +79,7 @@ public class conductorDAO {
         }
     }
     public void update(Conductor conductor){
-        String sql="UPDATE conductor SET documento=?, nombre=?, apellido=?, telefono=?, licencia=? WHERE nit=?;";
+        String sql="UPDATE conductor SET documento=?, nombre=?, apellido=?, telefono=?, licencia=?,imagen=? WHERE nit=?;";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, conductor.getDocumento());
@@ -86,7 +87,8 @@ public class conductorDAO {
             statement.setString(3, conductor.getApellido());
             statement.setLong(4, conductor.getTelefono());
             statement.setLong(5, conductor.getLicencia());
-            statement.setString(6, conductor.getNit());
+            statement.setString(6, conductor.getImagen());
+            statement.setString(7, conductor.getNit());
             statement.execute();
             statement.close();
         }catch(SQLException e){
