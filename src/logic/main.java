@@ -11,7 +11,7 @@ public class main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../ui/principal.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../ui/principalCar.fxml"));
         primaryStage.setTitle("La Mejorana");
         primaryStage.setResizable(false);
         primaryStage.initStyle(StageStyle.UNDECORATED);

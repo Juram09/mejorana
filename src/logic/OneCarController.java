@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.*;
@@ -20,9 +20,7 @@ import models.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Base64;
-import java.util.ResourceBundle;
 
 public class OneCarController{
 
@@ -125,6 +123,12 @@ public class OneCarController{
     @FXML
     private Label licenseLabel;
 
+    @FXML
+    private Button deleteButton;
+
+    @FXML
+    private Circle conductorImg;
+
     private Car car;
     private String placa;
     private Conductor conductor;
@@ -153,7 +157,7 @@ public class OneCarController{
     @FXML
     void goBack(ActionEvent event) throws IOException {
         ((Node)(event.getSource())).getScene().getWindow().hide();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principal.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
@@ -170,8 +174,8 @@ public class OneCarController{
     }
 
     @FXML
-    void goMenu(ActionEvent event) {
-
+    void goMenu(ActionEvent event) throws IOException {
+        goBack(event);
     }
 
     @FXML
@@ -193,30 +197,37 @@ public class OneCarController{
     void seeTecno(ActionEvent event) {
 
     }
+    @FXML
+    void deleteCar(ActionEvent event) throws IOException {
+        carDAO dao=new carDAO();
+        dao.delete(placasLabel.getText());
+        goBack(event);
+    }
+
 
     @FXML
     void showBack(ActionEvent event) {
-        show(this.car.getImgs().getTrasera());
+        show("car",this.car.getImgs().getTrasera());
     }
 
     @FXML
     void showCabin(ActionEvent event) {
-        show(this.car.getImgs().getCabin());
+        show("car",this.car.getImgs().getCabin());
     }
 
     @FXML
     void showFrontal(ActionEvent event) {
-        show(this.car.getImgs().getFrontal());
+        show("car",this.car.getImgs().getFrontal());
     }
 
     @FXML
     void showLeft(ActionEvent event) {
-        show(this.car.getImgs().getLatIzq());
+        show("car",this.car.getImgs().getLatIzq());
     }
 
     @FXML
     void showRight(ActionEvent event) {
-        show(this.car.getImgs().getLatDer());
+        show("car",this.car.getImgs().getLatDer());
     }
 
     public void setCar(String placa){
@@ -238,22 +249,34 @@ public class OneCarController{
         lastnameLabel.setText(String.valueOf(conductor.getApellido()));
         phoneLabel.setText(String.valueOf(conductor.getTelefono()));
         licenseLabel.setText(String.valueOf(conductor.getLicencia()));
-        show(car.getImgs().getFrontal());
+        show("conductor",conductor.getImagen());
+        show("car",car.getImgs().getFrontal());
     }
-    private void show(String image){
+    private void show(String tipo,String image){
         Image img;
         try{
             if (image==null){
-                img=new Image("imgs/NOT.jpg");
+                if (tipo.equals("car")){
+                    img=new Image("imgs/NOT.jpg");
+                }
+                else{
+                    img=new Image("imgs/NOTC.jpg");
+                }
             }else{
                 String imageDataBytes = image.substring(image.indexOf(",")+1);
                 InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageDataBytes.getBytes()));
-                img= new Image(stream);
+                img=new Image(stream);
             }
-            carImg.setImage(img);
+            if(tipo.equals("car")){
+                carImg.setImage(img);
+            }else{
+                conductorImg.setFill(new ImagePattern(img));
+            }
+
+
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

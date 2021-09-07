@@ -16,26 +16,26 @@ public class conductorDAO {
         connection=new DBConnection().getConnection();
     }
 
-    public List<Car> getAll(){
-        List<Car> cars=new ArrayList<>();
-        String sql="SELECT placa, km, tipo FROM car;";
+    public List<Conductor> getAll(){
+        List<Conductor> conductors=new ArrayList<>();
+        String sql="SELECT nit, nombre, apellido, imagen FROM conductor;";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet data=statement.executeQuery();
             while(data.next()){
-                Car car=new Car();
-                car.setPlaca(data.getString("placa"));
-                car.setKm(data.getLong("km"));
-                car.setTipo(data.getString("tipo"));
-                cars.add(car);
+                Conductor conductor=new Conductor();
+                conductor.setNit(data.getString("nit"));
+                conductor.setNombre(data.getString("nombre"));
+                conductor.setApellido(data.getString("apellido"));
+                conductor.setImagen(data.getString("imagen"));
+                conductors.add(conductor);
             }
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            System.out.println("Error perro");
         }
-        return cars;
+        return conductors;
     }
     public Conductor getOne(String nit){
         Conductor conductor=new Conductor();

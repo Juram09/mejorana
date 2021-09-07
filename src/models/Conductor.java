@@ -7,14 +7,16 @@ public class Conductor {
     private String apellido;
     private long telefono;
     private long licencia;
+    private String imagen;
 
-    public Conductor(String nit, String documento, String nombre, String apellido, long telefono, long licencia) {
+    public Conductor(String nit, String documento, String nombre, String apellido, long telefono, long licencia, String imagen) {
         this.nit = nit;
         this.documento = documento;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.licencia = licencia;
+        this.imagen = imagen;
     }
 
     public Conductor() {
@@ -66,5 +68,13 @@ public class Conductor {
 
     public void setLicencia(long licencia) {
         this.licencia = licencia;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }
