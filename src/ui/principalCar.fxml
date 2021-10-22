@@ -41,7 +41,7 @@
             </ImageView>
          </left>
       </BorderPane>
-      <TextField fx:id="searchtxt" cacheShape="false" centerShape="false" layoutX="299.0" layoutY="75.0" pickOnBounds="false" prefHeight="40.0" prefWidth="625.0" scaleShape="false" styleClass="transparent" stylesheets="@../css/style.css">
+      <TextField fx:id="searchTxt" cacheShape="false" centerShape="false" layoutX="299.0" layoutY="75.0" pickOnBounds="false" prefHeight="40.0" prefWidth="625.0" scaleShape="false" styleClass="transparent" stylesheets="@../css/style.css">
          <font>
             <Font name="Century Gothic" size="23.0" />
          </font>
@@ -70,5 +70,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
+      <Button fx:id="bckupBtn" layoutX="9.0" layoutY="591.0" mnemonicParsing="false" onAction="#backup" opacity="0.01" prefHeight="128.0" prefWidth="32.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
    </children>
 </AnchorPane>

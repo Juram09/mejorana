@@ -18,15 +18,18 @@ public class conductorDAO {
 
     public List<Conductor> getAll(){
         List<Conductor> conductors=new ArrayList<>();
-        String sql="SELECT nit, nombre, apellido, imagen FROM conductor;";
+        String sql="SELECT * FROM conductor;";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet data=statement.executeQuery();
             while(data.next()){
                 Conductor conductor=new Conductor();
                 conductor.setNit(data.getString("nit"));
+                conductor.setDocumento(data.getString("documento"));
                 conductor.setNombre(data.getString("nombre"));
                 conductor.setApellido(data.getString("apellido"));
+                conductor.setTelefono(data.getLong("telefono"));
+                conductor.setLicencia(data.getLong("licencia"));
                 conductor.setImagen(data.getString("imagen"));
                 conductors.add(conductor);
             }
@@ -51,6 +54,7 @@ public class conductorDAO {
                 conductor.setApellido(data.getString("apellido"));
                 conductor.setTelefono(data.getLong("telefono"));
                 conductor.setLicencia(data.getLong("licencia"));
+                conductor.setImagen(data.getString("imagen"));
             }
             data.close();
             statement.close();

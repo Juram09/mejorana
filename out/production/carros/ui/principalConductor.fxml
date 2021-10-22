@@ -63,10 +63,15 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <TextField fx:id="searchtxt" cacheShape="false" centerShape="false" layoutX="308.0" layoutY="76.0" pickOnBounds="false" prefHeight="40.0" prefWidth="625.0" scaleShape="false" styleClass="transparent" stylesheets="@../css/style.css">
+      <TextField fx:id="searchTxt" cacheShape="false" centerShape="false" layoutX="308.0" layoutY="76.0" pickOnBounds="false" prefHeight="40.0" prefWidth="625.0" scaleShape="false" styleClass="transparent" stylesheets="@../css/style.css">
          <font>
             <Font name="Century Gothic" size="23.0" />
          </font>
       </TextField>
+      <Button fx:id="bckupBtn" layoutX="10.0" layoutY="591.0" mnemonicParsing="false" onAction="#backup" opacity="0.01" prefHeight="129.0" prefWidth="30.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>

@@ -74,8 +74,7 @@ public class AddConductorController implements Initializable {
    @FXML
    void add(ActionEvent event) {
       if(nitTxt.getText()==null || tipoChoice.getValue()==null || nameTxt.getText()==null || lastnameTxt.getText()==null || phoneTxt.getText()==null || licenseTxt.getText()==null){
-         //TODO
-         //Ventana emergente error
+         //TODO: Ventana emergente error
          System.out.println("Error xd");
       }else{
          try {
@@ -83,8 +82,8 @@ public class AddConductorController implements Initializable {
             Conductor conductor = new Conductor();
             conductor.setNit(this.nitTxt.getText());
             conductor.setDocumento(this.tipoChoice.getValue());
-            conductor.setNombre(this.nameTxt.getText().substring(0,1).toUpperCase()+this.nameTxt.getText().substring(1));
-            conductor.setApellido(this.lastnameTxt.getText().substring(0,1).toUpperCase()+this.lastnameTxt.getText().substring(1));
+            conductor.setNombre(this.nameTxt.getText().substring(0,1).toUpperCase()+this.nameTxt.getText().substring(1).toLowerCase());
+            conductor.setApellido(this.lastnameTxt.getText().substring(0,1).toUpperCase()+this.lastnameTxt.getText().substring(1).toLowerCase());
             conductor.setTelefono(Long.parseLong(this.phoneTxt.getText()));
             conductor.setLicencia(Long.parseLong(this.licenseTxt.getText()));
             String base = toBase().replace("\n", "").replace("\r", "");
@@ -102,8 +101,7 @@ public class AddConductorController implements Initializable {
             ((Node)(event.getSource())).getScene().getWindow().hide();
          }
          catch (Exception e){
-            //TODO
-            //Ventanas emergentes
+            //TODO: Ventanas emergentes
          }
       }
    }
@@ -145,8 +143,7 @@ public class AddConductorController implements Initializable {
          img.setOpacity(1);
          img.setFill(new ImagePattern(image));
       }else{
-         //TODO
-         //Ventana emergente error
+         //TODO: Ventana emergente error
       }
    }
 
@@ -175,7 +172,9 @@ public class AddConductorController implements Initializable {
          imageString = encoder.encode(imageBytes);
          bos.close();
       } catch (IOException e) {
-         e.printStackTrace();
+         //TODO
+         System.out.println("No hay imagen");
+         //e.printStackTrace();
       }
       return imageString;
    }

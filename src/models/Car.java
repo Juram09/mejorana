@@ -1,5 +1,8 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Car {
     private String placa;
     private long km;
@@ -11,8 +14,9 @@ public class Car {
     private String tipo;
     private String conductor;
     private Images imgs;
+    private List<Document> docs;
 
-    public Car(String placa, long km, String color, String marca, int modelo, String chasis, int capacidad, String tipo, String conductor,Images imgs) {
+    public Car(String placa, long km, String color, String marca, int modelo, String chasis, int capacidad, String tipo, String conductor, Images imgs, List<Document> docs) {
         this.placa = placa;
         this.km = km;
         this.color = color;
@@ -23,6 +27,7 @@ public class Car {
         this.tipo = tipo;
         this.conductor = conductor;
         this.imgs=imgs;
+        this.docs=docs;
     }
 
     public Car() {
@@ -106,5 +111,13 @@ public class Car {
 
     public void setImgs(Images imgs) {
         this.imgs = imgs;
+    }
+
+    public List<Document> getDocs() {
+        return docs;
+    }
+
+    public void setDocs(List<Document> docs) {
+        this.docs = docs;
     }
 }

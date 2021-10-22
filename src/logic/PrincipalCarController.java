@@ -42,7 +42,7 @@ public class PrincipalCarController implements Initializable {
     private GridPane grid;
 
     @FXML
-    private TextField searchtxt;
+    private TextField searchTxt;
 
     @FXML
     private Button search;
@@ -57,7 +57,27 @@ public class PrincipalCarController implements Initializable {
     private Button addCarButton;
 
     @FXML
-    void addCar(ActionEvent event) {
+    private Button bckupBtn;
+
+    private carDAO dao;
+
+    @FXML
+    void backup(ActionEvent event) {
+
+    }
+
+    @FXML
+    void addCar(ActionEvent event) throws IOException {
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/addCar.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root,1280,720);
+        stage.setScene(scene);
+        stage.setTitle ("La mejorana");
+        stage.setResizable(false);
+        stage.show();
 
     }
 
@@ -90,7 +110,7 @@ public class PrincipalCarController implements Initializable {
 
                 OneCarCardController onecarcardcontroller=fxmlLoader.getController();
                 cars.get(i).setImgs(dao.getImages(cars.get(i).getPlaca()));
-                if (cars.get(i).getPlaca().contains(searchtxt.getText().toUpperCase())) {
+                if (cars.get(i).getPlaca().contains(searchTxt.getText().toUpperCase())) {
                     System.out.println(cars.get(i).getPlaca());
                     onecarcardcontroller.setData(cars.get(i));
                     if (column==3){
@@ -132,7 +152,6 @@ public class PrincipalCarController implements Initializable {
         Platform.exit();
         System.exit(0);
     }
-    private carDAO dao;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){

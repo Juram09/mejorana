@@ -45,7 +45,17 @@ public class PrincipalConductorController implements Initializable{
     private Button addConductorButton;
 
     @FXML
-    private TextField searchtxt;
+    private TextField searchTxt;
+
+    @FXML
+    private Button bckupBtn;
+
+    private List<Conductor> conductors;
+
+    @FXML
+    void backup(ActionEvent event) {
+
+    }
 
     @FXML
     void addConductor(ActionEvent event) throws IOException {
@@ -84,8 +94,6 @@ public class PrincipalConductorController implements Initializable{
     @FXML
     void searchConductor(ActionEvent event) {
         grid.getChildren().clear();
-        dao=new conductorDAO();
-        List<Conductor> conductors = dao.getAll();
         int column=0;
         int row=0;
         try{
@@ -96,7 +104,7 @@ public class PrincipalConductorController implements Initializable{
 
                 OneConductorCardController oneConductorCardController=fxmlLoader.getController();
                 oneConductorCardController.setData(conductors.get(i));
-                if (conductors.get(i).getNit().contains(searchtxt.getText().toUpperCase()) || conductors.get(i).getNombre().contains(searchtxt.getText().substring(0,1).toUpperCase()+searchtxt.getText().substring(1)) || conductors.get(i).getApellido().contains(searchtxt.getText().substring(0,1).toUpperCase()+searchtxt.getText().substring(1))) {
+                if (conductors.get(i).getNit().contains(searchTxt.getText().toUpperCase()) || conductors.get(i).getNombre().toLowerCase().contains(searchTxt.getText().toLowerCase()) || conductors.get(i).getApellido().toLowerCase().contains(searchTxt.getText().toLowerCase())) {
                     oneConductorCardController.setData(conductors.get(i));
                     if (column==3){
                         column=0;
@@ -132,10 +140,11 @@ public class PrincipalConductorController implements Initializable{
         }
     }
     private conductorDAO dao;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dao=new conductorDAO();
-        List<Conductor> conductors =dao.getAll();
+        this.conductors =dao.getAll();
         int column=0;
         int row=0;
         try{

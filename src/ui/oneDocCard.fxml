@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="72.0" prefWidth="502.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logic.OneDocCardController">
+   <children>
+      <ImageView fitHeight="101.0" fitWidth="502.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/oneDocCard.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="deleteBtn" layoutX="438.0" layoutY="3.0" mnemonicParsing="false" onAction="#delete" opacity="0.01" prefHeight="83.0" prefWidth="62.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label fx:id="nameLbl" layoutX="16.0" layoutY="2.0" prefHeight="25.0" prefWidth="419.0">
+         <font>
+            <Font name="Century Gothic Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="idLbl" layoutX="29.0" layoutY="24.0" prefHeight="19.0" prefWidth="393.0">
+         <font>
+            <Font name="Century Gothic" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="dateLbl" layoutX="29.0" layoutY="44.0" prefHeight="19.0" prefWidth="342.0">
+         <font>
+            <Font name="Century Gothic" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="vencimiento" layoutX="14.0" layoutY="65.0" prefHeight="19.0" prefWidth="419.0">
+         <font>
+            <Font name="Century Gothic Bold Italic" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="view" mnemonicParsing="false" onAction="#goDocument" opacity="0.01" prefHeight="88.0" prefWidth="434.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>

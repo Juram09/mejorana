@@ -7,20 +7,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.*;
+import logic.ViewMaintsController;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.List;
 
 public class OneCarController{
 
@@ -31,13 +38,16 @@ public class OneCarController{
     private Button editButton;
 
     @FXML
-    private Button addControlButton;
+    private Button viewMantButton;
 
     @FXML
-    private Button editDocumentsButton;
+    private Button viewDocButton;
 
     @FXML
-    private Button addMantButton;
+    private Button addTanqButton;
+
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private Button showFrontalButton;
@@ -55,19 +65,7 @@ public class OneCarController{
     private Button showCabinButton;
 
     @FXML
-    private Button seeCardButton;
-
-    @FXML
-    private Button seeSoatButton;
-
-    @FXML
     private Button goBackButton;
-
-    @FXML
-    private Button seeTecnoButton;
-
-    @FXML
-    private Button seeOtherButton;
 
     @FXML
     private Button exitButton;
@@ -100,52 +98,173 @@ public class OneCarController{
     private Label tipoLabel;
 
     @FXML
-    private Label cardLabel;
+    private Button nextpgButton;
 
     @FXML
-    private Label soatLabel;
+    private ImageView blackUnfocus;
 
     @FXML
-    private Label tecnoLabel;
+    private LineChart<?, ?> grafica;
 
     @FXML
-    private Label nitLabel;
+    private CategoryAxis xAxis;
 
     @FXML
-    private Label nameLabel;
-
-    @FXML
-    private Label lastnameLabel;
-
-    @FXML
-    private Label phoneLabel;
-
-    @FXML
-    private Label licenseLabel;
-
-    @FXML
-    private Button deleteButton;
-
-    @FXML
-    private Circle conductorImg;
+    private NumberAxis yAxis;
 
     private Car car;
     private String placa;
-    private Conductor conductor;
 
     @FXML
-    void addControl(ActionEvent event) {
+    void addTanq(ActionEvent event) throws IOException {
+        this.blackUnfocus.setOpacity(1);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/addTanq.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root, 690, 422);
+        stage.setScene(scene);
+        stage.setTitle("La mejorana");
+        stage.setResizable(false);
+        AddTanqController controller =fxmlLoader.getController();
+        controller.setCar(this.placasLabel.getText());
+        stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+        this.blackUnfocus.setOpacity(0);
+        this.setCar(this.placa);
+    }
+
+    @FXML
+    void nextPg(ActionEvent event) throws IOException {
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/oneCarSecond.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root, 1280, 720);
+        stage.setScene(scene);
+        stage.setTitle("La mejorana");
+        stage.setResizable(false);
+        OneCarSecondController controller=fxmlLoader.getController();
+        controller.setCar(this.placa);
+        stage.show();
+    }
+
+    @FXML
+    void viewDoc(ActionEvent event) throws IOException {
+        this.blackUnfocus.setOpacity(1);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/viewDocs.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root, 535, 535);
+        stage.setScene(scene);
+        stage.setTitle("La mejorana");
+        stage.setResizable(false);
+        ViewDocsController controller=fxmlLoader.getController();
+        controller.setDocs(this.placasLabel.getText());
+        stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+        this.blackUnfocus.setOpacity(0);
+    }
+
+    @FXML
+    void viewMant(ActionEvent event) throws IOException {
+        this.blackUnfocus.setOpacity(1);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/viewMaints.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root, 535, 535);
+        stage.setScene(scene);
+        stage.setTitle("La mejorana");
+        stage.setResizable(false);
+        ViewMaintsController controller=fxmlLoader.getController();
+        controller.setMaints(this.placasLabel.getText(),Long.parseLong(kmLabel.getText()));
+        stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+        this.blackUnfocus.setOpacity(0);
+    }
+
+    @FXML
+    void goEdit(ActionEvent event) {
 
     }
 
     @FXML
-    void addMant(ActionEvent event) {
-
+    void delete(ActionEvent event) throws IOException {
+        carDAO dao=new carDAO();
+        dao.delete(placasLabel.getText());
+        goBack(event);
     }
 
     @FXML
-    void editDocuments(ActionEvent event) {
+    void showBack(ActionEvent event) {
+        show(this.car.getImgs().getTrasera());
+    }
 
+    @FXML
+    void showCabin(ActionEvent event) {
+        show(this.car.getImgs().getCabin());
+    }
+
+    @FXML
+    void showFrontal(ActionEvent event) {
+        show(this.car.getImgs().getFrontal());
+    }
+
+    @FXML
+    void showLeft(ActionEvent event) {
+        show(this.car.getImgs().getLatIzq());
+    }
+
+    @FXML
+    void showRight(ActionEvent event) {
+        show(this.car.getImgs().getLatDer());
+    }
+
+    public void setCar(String placa){
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        this.placa=placa;
+        carDAO dao=new carDAO();
+        this.car=dao.getOne(this.placa);
+        placasLabel.setText(this.placa);
+        kmLabel.setText(String.valueOf(car.getKm()));
+        colorLabel.setText(String.valueOf(car.getColor()));
+        marcaLabel.setText(String.valueOf(car.getMarca()));
+        modeloLabel.setText(String.valueOf(car.getModelo()));
+        chasisLabel.setText(String.valueOf(car.getChasis()));
+        capacidadLabel.setText(String.valueOf(car.getCapacidad()));
+        tipoLabel.setText(car.getTipo());
+        show(car.getImgs().getFrontal());
+        List<Tank> tanks=dao.getTanks(this.placa);
+        XYChart.Series series=new XYChart.Series();
+        for(int i=tanks.size()-1;i>0;i--){
+            series.getData().add(new XYChart.Data<>(dateFormat.format(tanks.get(i).getFecha()),tanks.get(i).getGalonesPerKm()));
+        }
+        series.setName("Galones por km recorrido");
+        grafica.getData().addAll(series);
+        //grafica.setCreateSymbols(false);
+    }
+    private void show(String image){
+        Image img;
+        try{
+            if (image==null){
+                img=new Image("imgs/NOT.jpg");
+            }else{
+                String imageDataBytes = image.substring(image.indexOf(",")+1);
+                InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageDataBytes.getBytes()));
+                img=new Image(stream);
+            }
+            carImg.setPreserveRatio(false);
+            carImg.setImage(img);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -169,115 +288,7 @@ public class OneCarController{
     }
 
     @FXML
-    void goEdit(ActionEvent event) {
-
-    }
-
-    @FXML
     void goMenu(ActionEvent event) throws IOException {
         goBack(event);
     }
-
-    @FXML
-    void seeCard(ActionEvent event) {
-
-    }
-
-    @FXML
-    void seeOther(ActionEvent event) {
-
-    }
-
-    @FXML
-    void seeSoat(ActionEvent event) {
-
-    }
-
-    @FXML
-    void seeTecno(ActionEvent event) {
-
-    }
-    @FXML
-    void deleteCar(ActionEvent event) throws IOException {
-        carDAO dao=new carDAO();
-        dao.delete(placasLabel.getText());
-        goBack(event);
-    }
-
-
-    @FXML
-    void showBack(ActionEvent event) {
-        show("car",this.car.getImgs().getTrasera());
-    }
-
-    @FXML
-    void showCabin(ActionEvent event) {
-        show("car",this.car.getImgs().getCabin());
-    }
-
-    @FXML
-    void showFrontal(ActionEvent event) {
-        show("car",this.car.getImgs().getFrontal());
-    }
-
-    @FXML
-    void showLeft(ActionEvent event) {
-        show("car",this.car.getImgs().getLatIzq());
-    }
-
-    @FXML
-    void showRight(ActionEvent event) {
-        show("car",this.car.getImgs().getLatDer());
-    }
-
-    public void setCar(String placa){
-        this.placa=placa;
-        carDAO dao=new carDAO();
-        conductorDAO cdao=new conductorDAO();
-        this.car=dao.getOne(this.placa);
-        placasLabel.setText(this.placa);
-        kmLabel.setText(String.valueOf(car.getKm()));
-        colorLabel.setText(String.valueOf(car.getColor()));
-        marcaLabel.setText(String.valueOf(car.getMarca()));
-        modeloLabel.setText(String.valueOf(car.getModelo()));
-        chasisLabel.setText(String.valueOf(car.getChasis()));
-        capacidadLabel.setText(String.valueOf(car.getCapacidad()));
-        tipoLabel.setText(car.getTipo());
-        this.conductor=cdao.getOne(dao.getConductor(this.placa));
-        nitLabel.setText(String.valueOf(conductor.getNit()));
-        nameLabel.setText(String.valueOf(conductor.getNombre()));
-        lastnameLabel.setText(String.valueOf(conductor.getApellido()));
-        phoneLabel.setText(String.valueOf(conductor.getTelefono()));
-        licenseLabel.setText(String.valueOf(conductor.getLicencia()));
-        show("conductor",conductor.getImagen());
-        show("car",car.getImgs().getFrontal());
-    }
-    private void show(String tipo,String image){
-        Image img;
-        try{
-            if (image==null){
-                if (tipo.equals("car")){
-                    img=new Image("imgs/NOT.jpg");
-                }
-                else{
-                    img=new Image("imgs/NOTC.jpg");
-                }
-            }else{
-                String imageDataBytes = image.substring(image.indexOf(",")+1);
-                InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageDataBytes.getBytes()));
-                img=new Image(stream);
-            }
-            if(tipo.equals("car")){
-                carImg.setImage(img);
-            }else{
-                conductorImg.setFill(new ImagePattern(img));
-            }
-
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

@@ -1,12 +1,12 @@
 package models;
 
 import database.DBConnection;
+import sun.applet.Main;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class carDAO {
@@ -15,7 +15,7 @@ public class carDAO {
     public carDAO() {
         connection=new DBConnection().getConnection();
     }
-
+    //Car
     public List<Car> getAll(){
         List<Car> cars=new ArrayList<>();
         String sql="SELECT placa, km, tipo FROM car;";
@@ -63,11 +63,7 @@ public class carDAO {
         }
         return car;
     }
-    public Images getImages(String placa){
-        imagesDAO img = new imagesDAO();
-        Images image = img.getOne(placa);
-        return image;
-    }
+
     public void insert(Car car) {
         String sql="INSERT INTO car(placa, km, color, marca, modelo, chasis, capacidad, tipo, conductor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try{
@@ -88,6 +84,7 @@ public class carDAO {
             throw new RuntimeException(e);
         }
     }
+
     public void update(Car car){
         String sql="UPDATE car SET km=?, color=?, marca=?, modelo=?, chasis=?, capacidad=?, tipo=?, conductor=? WHERE placa=?;";
         try{
@@ -108,6 +105,20 @@ public class carDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateKm(String placa, Long km){
+        String sql="UPDATE car SET km=? WHERE placa=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, km);
+            statement.setString(2, placa);
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
     public void delete(String placa){
         String sql="DELETE FROM car WHERE placa=?;";
         try{
@@ -120,6 +131,7 @@ public class carDAO {
             throw new RuntimeException(e);
         }
     }
+    //Conductor
     public String getConductor(String placa){
         String sql="SELECT conductor FROM car WHERE placa=?;";
         String conductor=null;
@@ -138,4 +150,306 @@ public class carDAO {
         }
         return conductor;
     }
+    //Document
+    public List<Document> getDocs(String placa){
+        List<Document> docs=new ArrayList<>();
+        String sql="SELECT * FROM documento WHERE placa=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            ResultSet data=statement.executeQuery();
+            while(data.next()){
+                Document doc=new Document();
+                doc.setId(data.getString("id"));
+                doc.setDate(data.getDate("fecha_in"));
+                doc.setName(data.getString("nombre"));
+                doc.setImg(data.getString("imagen"));
+                doc.setActive(data.getBoolean("active"));
+                System.out.println(data.getBoolean("active"));
+                if(data.getString("fecha_out")!=null){
+                    doc.setDateOut(data.getDate("fecha_out"));
+                }
+                docs.add(doc);
+            }
+            data.close();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return docs;
+    }
+
+    public void insertDoc(Document document,String placa){
+        String sql="INSERT INTO documento(id, nombre, placa, fecha_in, imagen, descripcion, fecha_out, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, document.getId());
+            statement.setString(2, document.getName());
+            statement.setString(3, placa);
+            statement.setDate(4, new java.sql.Date(document.getDate().getTime()));
+            statement.setString(5, document.getImg());
+            statement.setString(6, document.getDescription());
+            if(document.getDateOut()!=null){
+                statement.setDate(7, new java.sql.Date(document.getDateOut().getTime()));
+            }else{
+                statement.setDate(7, null);
+            }
+            statement.setBoolean(8, document.isActive());
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateDoc(Document document, String placa){
+        String sql="UPDATE documento SET active=? WHERE id=? AND nombre=? AND placa=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setBoolean(1, document.isActive());
+            statement.setString(2, document.getId());
+            statement.setString(3, document.getName());
+            statement.setString(4, placa);
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteDoc(String placa, String name, String id){
+        String sql="DELETE FROM documento where placa=? AND id=? AND nombre=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            statement.setString(2, id);
+            statement.setString(3, name);
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            System.out.println("Error");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+    //Observations
+    public List<Observation> getObs(String placa){
+        List<Observation> observations=new ArrayList<>();
+        String sql="SELECT id, fecha, observacion FROM observacion WHERE placa=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            ResultSet data=statement.executeQuery();
+            while(data.next()){
+                Observation obs=new Observation();
+                obs.setId(data.getLong("id"));
+                obs.setObservation(data.getString("observacion"));
+                obs.setDate(data.getDate("fecha"));
+                observations.add(obs);
+            }
+            data.close();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return observations;
+    }
+
+    public void insertObs(String observation,String placa){
+        String sql="INSERT INTO observacion(placa, observacion, fecha) VALUES (?, ?, ?);";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            statement.setString(2, observation);
+            statement.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteObs(long id){
+        String sql="DELETE FROM observacion where id=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Tanks
+    public List<Tank> getTanks(String placa){
+        List<Tank> tanks=new ArrayList<>();
+        String sql="SELECT * FROM tanqueo WHERE placa=? ORDER BY id DESC LIMIT 20;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            ResultSet data=statement.executeQuery();
+            while(data.next()){
+                Tank tank=new Tank();
+                tank.setPlaca(placa);
+                tank.setKm(data.getLong("km"));
+                tank.setGalones(data.getLong("galones"));
+                tank.setGalonesPerKm(data.getLong("kmpgalon"));
+                tank.setFecha(data.getDate("fecha"));
+                tanks.add(tank);
+            }
+            data.close();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return tanks;
+    }
+
+    public Tank getTank(String placa){
+        Tank tank=new Tank();
+        String sql="SELECT * FROM tanqueo WHERE placa=? ORDER BY id DESC LIMIT 1;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            ResultSet data=statement.executeQuery();
+            while(data.next()){
+                tank.setId(data.getLong("id"));
+                tank.setPlaca(placa);
+                tank.setKm(data.getLong("km"));
+                tank.setGalones(data.getLong("galones"));
+            }
+            data.close();
+            statement.close();
+        }catch(SQLException e){
+            return null;
+        }
+        return tank;
+    }
+
+    public void insertTank(Tank tank, Date date, String placa){
+        String sql="INSERT INTO tanqueo (placa, fecha, km, galones) VALUES (?, ?, ?, ?);";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            statement.setDate(2, new java.sql.Date(date.getTime()));
+            statement.setLong(3, tank.getKm());
+            statement.setLong(4, tank.getGalones());
+            statement.execute();
+            statement.close();
+            updateKm(placa,tank.getKm());
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateTank(Long id, Long kmpgalon){
+        String sql="UPDATE tanqueo SET kmpgalon=? WHERE id=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, kmpgalon);
+            statement.setLong(2, id);
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Document
+    public List<Maintenance> getMaints(String placa){
+        List<Maintenance> maints=new ArrayList<>();
+        String sql="SELECT * FROM mantenimiento WHERE placa=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            ResultSet data=statement.executeQuery();
+            while(data.next()){
+                Maintenance maint=new Maintenance();
+                maint.setId(data.getLong("id"));
+                maint.setTipo(data.getString("tipo"));
+                maint.setKm(data.getLong("km"));
+                maint.setProx(data.getLong("prox"));
+                maint.setFecha(data.getDate("fecha"));
+                maint.setDescripcion(data.getString("descripcion"));
+                maint.setActive(data.getBoolean("active"));
+                maints.add(maint);
+            }
+            data.close();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return maints;
+    }
+
+    public void insertMaint(Maintenance maint,String placa){
+        System.out.println(maint.toString());
+        String sql="INSERT INTO mantenimiento(placa, km, fecha, tipo, imagen, descripcion, active, prox) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, placa);
+            statement.setLong(2, maint.getKm());
+            statement.setDate(3, new java.sql.Date(maint.getFecha().getTime()));
+            statement.setString(4, maint.getTipo());
+            statement.setString(5, maint.getImagen());
+            if(maint.getDescripcion()!=null){
+                statement.setString(6, maint.getDescripcion());
+            }else{
+                statement.setString(6, null);
+            }
+            statement.setBoolean(7, maint.isActive());
+            statement.setLong(8, maint.getProx());
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateMaint(Maintenance maint){
+        String sql="UPDATE mantenimiento SET active=? WHERE id=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setBoolean(1, maint.isActive());
+            statement.setLong(2, maint.getId());
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteMaint(Long id){
+        String sql="DELETE FROM mantenimiento where id=?;";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            statement.execute();
+            statement.close();
+        }catch(SQLException e){
+            System.out.println("Error");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Images getImages(String placa){
+        imagesDAO img = new imagesDAO();
+        Images image = img.getOne(placa);
+        return image;
+    }
+
 }
