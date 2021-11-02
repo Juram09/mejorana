@@ -93,7 +93,6 @@ public class EditConductorController implements Initializable {
     void edit(ActionEvent event) {
         if(tipoChoice.getValue()==null || nameTxt.getText()==null || lastnameTxt.getText()==null || phoneTxt.getText()==null || licenseTxt.getText()==null){
             //TODO: Ventana emergente error
-            System.out.println("Error xd");
         }else{
             try {
                 conductorDAO dao = new conductorDAO();
@@ -124,7 +123,6 @@ public class EditConductorController implements Initializable {
                 ((Node)(event.getSource())).getScene().getWindow().hide();
             }
             catch (Exception e){
-                System.out.println("Error: ");
                 e.printStackTrace();
                 //TODO: Ventanas emergentes
             }
@@ -213,7 +211,6 @@ public class EditConductorController implements Initializable {
                 return image;
             }
             catch (Exception e) {
-                System.out.println("La imagen no se puede cargar");
                 return null;
             }
         }

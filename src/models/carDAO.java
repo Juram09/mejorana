@@ -53,6 +53,7 @@ public class carDAO {
                 car.setChasis(data.getString("chasis"));
                 car.setCapacidad(data.getInt("capacidad"));
                 car.setTipo(data.getString("tipo"));
+                car.setConductor(data.getString("conductor"));
                 car.setImgs(getImages(placa));
             }
             data.close();
@@ -65,7 +66,7 @@ public class carDAO {
     }
 
     public void insert(Car car) {
-        String sql="INSERT INTO car(placa, km, color, marca, modelo, chasis, capacidad, tipo, conductor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sql="INSERT INTO car(placa, km, color, marca, modelo, chasis, capacidad, tipo, conductor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, car.getPlaca());
@@ -165,7 +166,6 @@ public class carDAO {
                 doc.setName(data.getString("nombre"));
                 doc.setImg(data.getString("imagen"));
                 doc.setActive(data.getBoolean("active"));
-                System.out.println(data.getBoolean("active"));
                 if(data.getString("fecha_out")!=null){
                     doc.setDateOut(data.getDate("fecha_out"));
                 }
@@ -230,7 +230,6 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            System.out.println("Error");
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -365,7 +364,7 @@ public class carDAO {
         }
     }
 
-    //Document
+    //Maintenance
     public List<Maintenance> getMaints(String placa){
         List<Maintenance> maints=new ArrayList<>();
         String sql="SELECT * FROM mantenimiento WHERE placa=?;";
@@ -394,7 +393,6 @@ public class carDAO {
     }
 
     public void insertMaint(Maintenance maint,String placa){
-        System.out.println(maint.toString());
         String sql="INSERT INTO mantenimiento(placa, km, fecha, tipo, imagen, descripcion, active, prox) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -440,7 +438,6 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            System.out.println("Error");
             e.printStackTrace();
             throw new RuntimeException(e);
         }

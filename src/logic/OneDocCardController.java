@@ -99,7 +99,6 @@ public class OneDocCardController {
          Date now= java.sql.Date.valueOf(LocalDate.now());
          long days=(document.getDateOut().getTime()-now.getTime())/86400000;
          if(days>180){
-            System.out.println("COLOR LA PTM");
             vencimiento.setTextFill(Color.GREEN);
          }else if(days>60){
             vencimiento.setTextFill(Color.valueOf("#fecb02"));

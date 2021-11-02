@@ -70,6 +70,7 @@ public class AddDocumentController implements Initializable {
     private Image image;
     private File selectedFile;
     private boolean newImg;
+    private AddCarController controller1;
 
     @FXML
     void add(ActionEvent event) throws IOException {
@@ -87,7 +88,12 @@ public class AddDocumentController implements Initializable {
                 document.setImg("data:image/jpeg;base64,"+base);
             }
             document.setActive(true);
-            this.controller.addDoc(document);
+            if(controller==null){
+                this.controller1.addDoc(document);
+            }
+            else{
+                this.controller.addDoc(document);
+            }
             exit(event);
         }else{
             //TODO: Ventana emergente error
@@ -101,13 +107,13 @@ public class AddDocumentController implements Initializable {
 
     @FXML
     void exit(ActionEvent event) {
+        if(controller!=null)
         this.controller.updateDocs(placaLbl.getText());
         ((Node)(event.getSource())).getScene().getWindow().hide();
     }
 
     @FXML
     void comboChange(ActionEvent event) {
-        System.out.println(comboType.getValue());
         if(comboType.getValue().toLowerCase().contains("soat") || comboType.getValue().toLowerCase().contains("tecnomecanica")){
             this.checkDate.setSelected(true);
             this.datePicker1.setDisable(false);
@@ -152,6 +158,11 @@ public class AddDocumentController implements Initializable {
         placaLbl.setText(placa);
         this.controller=controller;
     }
+    
+    public void setCar(String placa, AddCarController controller){
+        placaLbl.setText(placa);
+        this.controller1=controller;
+    }
 
     private String getImage(){
         String imageString = null;
@@ -164,11 +175,8 @@ public class AddDocumentController implements Initializable {
             imageString = encoder.encode(imageBytes);
             bos.close();
         } catch (Exception e) {
-            //TODO
-            System.out.println("No hay imagen");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
-        System.out.println(imageString);
         return imageString;
     }
 

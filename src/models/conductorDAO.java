@@ -36,7 +36,8 @@ public class conductorDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            System.out.println("Error perro");
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return conductors;
     }

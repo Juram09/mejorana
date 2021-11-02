@@ -16,11 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import models.Document;
 import models.Maintenance;
 import sun.misc.BASE64Encoder;
-import logic.ViewMaintsController;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -60,11 +57,13 @@ public class AddMaintController implements Initializable{
 
     @FXML
     private Button addBtn;
+
     private Image image;
     private File selectedFile;
     private ViewMaintsController controller;
     private String placa;
     private boolean newImg;
+    private Long actualKm;
 
 
     @FXML
@@ -126,8 +125,9 @@ public class AddMaintController implements Initializable{
         datePicker.setStyle("-fx-font: 14px \"Century Gothic\";");
     }
 
-    public void setCar(String placa, ViewMaintsController controller){
+    public void setCar(String placa, Long actualKm, ViewMaintsController controller){
         this.placa=placa;
+        this.actualKm=actualKm;
         this.controller=controller;
     }
 
@@ -136,7 +136,9 @@ public class AddMaintController implements Initializable{
             return false;
         }else if(this.checkNext.isSelected() && this.kmTxt1.getText().isEmpty()){
             return false;
-        }else{
+        }else if(Long.parseLong(this.kmTxt1.getText())<this.actualKm){
+            return false;
+        }else {
             return true;
         }
     }
@@ -152,9 +154,7 @@ public class AddMaintController implements Initializable{
             imageString = encoder.encode(imageBytes);
             bos.close();
         } catch (Exception e) {
-            //TODO
-            System.out.println("No hay imagen");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return imageString;
     }

@@ -41,8 +41,19 @@ public class OneCarCardController {
     private Car car;
 
     @FXML
-    void editCar(ActionEvent event) {
-
+    void editCar(ActionEvent event) throws IOException {
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/editCar.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        EditCarController controller=fxmlLoader.getController();
+        controller.setCar(placaLabel.getText());
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root,1280,720);
+        stage.setScene(scene);
+        stage.setTitle ("La mejorana");
+        stage.setResizable(false);
+        stage.show();
     }
 
     @FXML

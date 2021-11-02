@@ -39,16 +39,16 @@ public class imagesDAO {
         return images;
     }
 
-    public void insert(Car car) {
+    public void insert(Images img, String placa) {
         String sql="INSERT INTO imagenes(placa, frontal, trasera, izquierda, derecha, cabina) VALUES (?, ?, ?, ?, ?, ?);";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, car.getPlaca());
-            statement.setString(2, car.getImgs().getFrontal());
-            statement.setString(3, car.getImgs().getTrasera());
-            statement.setString(4, car.getImgs().getLatIzq());
-            statement.setString(5, car.getImgs().getLatDer());
-            statement.setString(6, car.getImgs().getCabin());
+            statement.setString(1, placa);
+            statement.setString(2, img.getFrontal());
+            statement.setString(3, img.getTrasera());
+            statement.setString(4, img.getLatIzq());
+            statement.setString(5, img.getLatDer());
+            statement.setString(6, img.getCabin());
             statement.execute();
             statement.close();
         }catch(SQLException e){
@@ -56,16 +56,16 @@ public class imagesDAO {
             throw new RuntimeException(e);
         }
     }
-    public void update(Car car){
+    public void update(Images img,String placa){
         String sql="UPDATE imagenes SET frontal=?, trasera=?, izquierda=?, derecha=?, cabina=? WHERE placa=?;";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, car.getImgs().getFrontal());
-            statement.setString(2, car.getImgs().getTrasera());
-            statement.setString(3, car.getImgs().getLatIzq());
-            statement.setString(4, car.getImgs().getLatDer());
-            statement.setString(5, car.getImgs().getCabin());
-            statement.setString(6, car.getPlaca());
+            statement.setString(1, img.getFrontal());
+            statement.setString(2, img.getTrasera());
+            statement.setString(3, img.getLatIzq());
+            statement.setString(4, img.getLatDer());
+            statement.setString(5, img.getCabin());
+            statement.setString(6, placa);
             statement.execute();
             statement.close();
         }catch(SQLException e){

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.AddConductorController">
+   <children>
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/addCondutor.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="nitTxt" layoutX="755.0" layoutY="213.0" prefHeight="25.0" prefWidth="328.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="nameTxt" layoutX="755.0" layoutY="332.0" prefHeight="25.0" prefWidth="328.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="lastnameTxt" layoutX="755.0" layoutY="388.0" prefHeight="25.0" prefWidth="328.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="phoneTxt" layoutX="755.0" layoutY="445.0" prefHeight="25.0" prefWidth="328.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="licenseTxt" layoutX="755.0" layoutY="504.0" prefHeight="25.0" prefWidth="328.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <ChoiceBox fx:id="tipoChoice" layoutX="753.0" layoutY="274.0" prefHeight="25.0" prefWidth="328.0" styleClass="transparent" />
+      <Button fx:id="addButton" layoutX="520.0" layoutY="554.0" mnemonicParsing="false" onAction="#add" opacity="0.01" prefHeight="37.0" prefWidth="514.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="menuButton" layoutY="2.0" mnemonicParsing="false" onAction="#goMenu" opacity="0.02" prefHeight="75.0" prefWidth="209.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="backButton" layoutX="1148.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBack" opacity="0.01" prefHeight="51.0" prefWidth="51.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="exitButton" layoutX="1217.0" layoutY="7.0" mnemonicParsing="false" onAction="#exit" opacity="0.01" prefHeight="51.0" prefWidth="51.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Circle fx:id="img" fill="WHITE" layoutX="570.0" layoutY="363.0" opacity="0.01" radius="150.0" stroke="WHITE" strokeType="INSIDE" />
+      <Button fx:id="imgButton" layoutX="419.0" layoutY="213.0" mnemonicParsing="false" onAction="#choiceImg" opacity="0.01" prefHeight="300.0" prefWidth="300.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>

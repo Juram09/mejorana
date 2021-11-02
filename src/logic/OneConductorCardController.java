@@ -99,7 +99,6 @@ public class OneConductorCardController {
             return img;
         }
         catch (Exception e) {
-            System.out.println("La imagen no se puede cargar");
             return null;
         }
     }

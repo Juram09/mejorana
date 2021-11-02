@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="534.0" prefWidth="754.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.AddDocumentController">
+   <children>
+      <ImageView fitHeight="646.0" fitWidth="754.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/addDoc.png" />
+         </image>
+      </ImageView>
+      <ComboBox fx:id="comboType" editable="true" layoutX="55.0" layoutY="128.0" onAction="#comboChange" prefHeight="25.0" prefWidth="298.0" styleClass="transparent" stylesheets="@../css/style.css" />
+      <Label fx:id="placaLbl" layoutX="55.0" layoutY="236.0" prefHeight="25.0" prefWidth="298.0">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="numberTxt" layoutX="45.0" layoutY="183.0" prefHeight="28.0" prefWidth="306.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font>
+      </TextField>
+      <TextArea fx:id="descriptionTxt" layoutX="45.0" layoutY="396.0" prefHeight="91.0" prefWidth="306.0" styleClass="transparent" wrapText="true">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font>
+      </TextArea>
+      <DatePicker fx:id="datePicker" layoutX="47.0" layoutY="288.0" onAction="#newDate" prefHeight="25.0" prefWidth="306.0" styleClass="transparent" />
+      <ImageView fx:id="Img" fitHeight="375.0" fitWidth="350.0" layoutX="389.0" layoutY="151.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/addImg.png" />
+         </image></ImageView>
+      <Button fx:id="ImgBtn" layoutX="389.0" layoutY="151.0" mnemonicParsing="false" onAction="#searchImg" opacity="0.01" prefHeight="332.0" prefWidth="350.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="exitBtn" layoutX="703.0" layoutY="6.0" mnemonicParsing="false" onAction="#exit" opacity="0.01" prefHeight="40.0" prefWidth="40.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="addBtn" layoutX="70.0" layoutY="498.0" mnemonicParsing="false" onAction="#add" opacity="0.01" prefHeight="30.0" prefWidth="263.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <DatePicker fx:id="datePicker1" disable="true" layoutX="125.0" layoutY="344.0" prefHeight="25.0" prefWidth="225.0" styleClass="transparent" />
+      <CheckBox fx:id="checkDate" layoutX="56.0" layoutY="342.0" mnemonicParsing="false" onAction="#changeDate" prefHeight="30.0" prefWidth="28.0" styleClass="big-check-box" />
+   </children>
+</AnchorPane>

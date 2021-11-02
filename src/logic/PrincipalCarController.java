@@ -111,7 +111,6 @@ public class PrincipalCarController implements Initializable {
                 OneCarCardController onecarcardcontroller=fxmlLoader.getController();
                 cars.get(i).setImgs(dao.getImages(cars.get(i).getPlaca()));
                 if (cars.get(i).getPlaca().contains(searchTxt.getText().toUpperCase())) {
-                    System.out.println(cars.get(i).getPlaca());
                     onecarcardcontroller.setData(cars.get(i));
                     if (column==3){
                         column=0;

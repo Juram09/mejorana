@@ -83,7 +83,7 @@ public class ViewMaintsController {
         stage.setTitle("La mejorana");
         stage.setResizable(false);
         AddMaintController controller=fxmlLoader.getController();
-        controller.setCar(this.placa, this);
+        controller.setCar(this.placa, this.actualKm, this);
         stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.show();
@@ -199,7 +199,6 @@ public class ViewMaintsController {
         for(int i=0;i<this.pMaints.size();i++){
             boolean updated=false;
             for(int j=0;j<this.maints.size();j++){
-                System.out.println(pMaints.get(i).getId()+", "+maints.get(j).getId());
                 if(pMaints.get(i).equals(maints.get(j))){
                     updated=true;
                     break;
@@ -214,7 +213,6 @@ public class ViewMaintsController {
             }
         }
         for(int i=0;i<this.maints.size();i++){
-            System.out.println(i);
             boolean updated=false;
             for(int j=0;j<this.pMaints.size();j++){
                 if(maints.get(i).equals(pMaints.get(j))){
@@ -226,12 +224,6 @@ public class ViewMaintsController {
                 }
             }
             if(!updated){
-                System.out.println(maints.get(i).getKm());
-                System.out.println(maints.get(i).getTipo());
-                System.out.println(maints.get(i).getFecha());
-                System.out.println(maints.get(i).getDescripcion());
-                System.out.println(maints.get(i).getKm());
-                System.out.println(maints.get(i).getKm());
                 dao.insertMaint(this.maints.get(i),this.placa);
             }
         }

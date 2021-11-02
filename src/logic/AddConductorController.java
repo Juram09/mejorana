@@ -74,8 +74,9 @@ public class AddConductorController implements Initializable {
    @FXML
    void add(ActionEvent event) {
       if(nitTxt.getText()==null || tipoChoice.getValue()==null || nameTxt.getText()==null || lastnameTxt.getText()==null || phoneTxt.getText()==null || licenseTxt.getText()==null){
-         //TODO: Ventana emergente error
-         System.out.println("Error xd");
+         //TODO:Ventana emergente error
+      }else if(check(phoneTxt.getText()) || check(licenseTxt.getText())) {
+         //TODO
       }else{
          try {
             conductorDAO dao = new conductorDAO();
@@ -104,6 +105,16 @@ public class AddConductorController implements Initializable {
             //TODO: Ventanas emergentes
          }
       }
+   }
+
+   private boolean check(String text) {
+      boolean bool= false;
+      try{
+         Long x=Long.parseLong(text);
+      }catch (Exception e){
+         bool=true;
+      }
+      return bool;
    }
 
    @FXML
@@ -172,9 +183,7 @@ public class AddConductorController implements Initializable {
          imageString = encoder.encode(imageBytes);
          bos.close();
       } catch (IOException e) {
-         //TODO
-         System.out.println("No hay imagen");
-         //e.printStackTrace();
+         e.printStackTrace();
       }
       return imageString;
    }

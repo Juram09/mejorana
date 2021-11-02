@@ -17,22 +17,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import models.Car;
-import models.Conductor;
-import models.Images;
-import models.conductorDAO;
+import models.*;
 import sun.misc.BASE64Encoder;
-
 import javax.imageio.ImageIO;
+import javax.print.Doc;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class AddCarController implements Initializable {
 
@@ -103,6 +101,15 @@ public class AddCarController implements Initializable {
     private TextField tipoTxt;
 
     @FXML
+    private Label tarjetaLbl;
+
+    @FXML
+    private Label soatLbl;
+
+    @FXML
+    private Label tecnomecanicaLbl;
+
+    @FXML
     private Label nombreLbl;
 
     @FXML
@@ -123,25 +130,73 @@ public class AddCarController implements Initializable {
     @FXML
     private ImageView blackUnfocus;
 
-    private Car car;
-    private Conductor conductor;
     private Images imgs;
     private int active;
     private File selectedFile;
+    private List<Conductor> conductors;
+    private List<Document> documents=new ArrayList<>();
+    private boolean conductorInDB;
+    private Conductor conductor;
 
     @FXML
     void add(ActionEvent event) {
-        //TODO: VALIDATOR, INSERT
+        if(this.validate()){
+            Car car=new Car();
+            car.setPlaca(this.placaTxt.getText());
+            car.setKm(Long.parseLong(this.kmTxt.getText()));
+            car.setTipo(this.tipoTxt.getText());
+            car.setCapacidad(Integer.parseInt(this.capacidadTxt.getText()));
+            car.setChasis(this.chasisTxt.getText());
+            car.setColor(this.colorTxt.getText());
+            car.setMarca(this.marcaTxt.getText());
+            car.setModelo(Integer.parseInt(this.modeloTxt.getText()));
+            if(!this.conductorInDB){
+                insertConductor();
+            }
+            car.setConductor(this.choiceConductor.getValue());
+            carDAO dao=new carDAO();
+            dao.insert(car);
+            insertImgs();
+            insertDocuments();
+        }
     }
 
     @FXML
-    void addConductor(ActionEvent event) {
-        //TODO: VENTANA
+    void addConductor(ActionEvent event) throws IOException {
+        this.blackUnfocus.setOpacity(1);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/addConductorEmergent.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root, 755, 535);
+        stage.setScene(scene);
+        stage.setTitle("La mejorana");
+        stage.setResizable(false);
+        AddConductorEmergentController controller=fxmlLoader.getController();
+        controller.setData(this);
+        stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+        this.blackUnfocus.setOpacity(0);
     }
 
     @FXML
-    void addDocument(ActionEvent event) {
-        //TODO: VENTANA
+    void addDocument(ActionEvent event) throws IOException {
+        this.blackUnfocus.setOpacity(1);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/addDocument.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root, 755, 535);
+        stage.setScene(scene);
+        stage.setTitle("La mejorana");
+        stage.setResizable(false);
+        AddDocumentController controller=fxmlLoader.getController();
+        controller.setCar(placaTxt.getText(),this);
+        stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+        this.blackUnfocus.setOpacity(0);
     }
 
     @FXML
@@ -260,12 +315,22 @@ public class AddCarController implements Initializable {
         this.active = 1;
         this.imgs = new Images();
         conductorDAO dao = new conductorDAO();
-        List<Conductor> conductors = dao.getAll();
-        for (int i = 0; i < conductors.size(); i++)
-            this.choiceConductor.getItems().add(conductors.get(i).getNit());
+        this.conductors = dao.getAll();
+        for (int i = 0; i < this.conductors.size(); i++)
+            this.choiceConductor.getItems().add(this.conductors.get(i).getNit());
         this.choiceConductor.setStyle("-fx-font: 16px \"Century Gothic\";");
         choiceConductor.setOnAction(event -> {
             Conductor conductor = dao.getOne(choiceConductor.getValue());
+            if(conductor.getLicencia()==0){
+                for(int i=0;i<this.conductors.size();i++){
+                    if(conductors.get(i).getNit().equals(this.choiceConductor.getValue()))
+                        conductor = this.conductors.get(i);
+                        this.conductorInDB=false;
+                        this.conductor=conductor;
+                }
+            }else{
+                this.conductorInDB=true;
+            }
             this.nombreLbl.setText(conductor.getNombre());
             this.apellidoLbl.setText(conductor.getApellido());
             this.telefonoLbl.setText(String.valueOf(conductor.getTelefono()));
@@ -273,7 +338,43 @@ public class AddCarController implements Initializable {
             circleImg.setOpacity(1);
             getConductorImg(conductor.getImagen());
         });
+    }
 
+    private void insertDocuments() {
+        carDAO dao=new carDAO();
+        for(int i=0;i<this.documents.size();i++){
+            dao.insertDoc(this.documents.get(i),this.placaTxt.getText());
+        }
+    }
+
+    private void insertImgs() {
+        imagesDAO dao=new imagesDAO();
+        dao.insert(this.imgs, this.placaTxt.getText());
+    }
+
+    private void insertConductor() {
+        conductorDAO dao=new conductorDAO();
+        dao.insert(this.conductor);
+    }
+
+    private boolean validate() {
+        boolean valid=true;
+        if(placaTxt.getText().isEmpty() || kmTxt.getText().isEmpty() || colorTxt.getText().isEmpty() || marcaTxt.getText().isEmpty() || modeloTxt.getText().isEmpty() || chasisTxt.getText().isEmpty() || capacidadTxt.getText().isEmpty() || tipoTxt.getText().isEmpty() || choiceConductor.getValue()==null){
+            valid=false;
+        }else if(check(kmTxt.getText()) || check(modeloTxt.getText()) || check(capacidadTxt.getText())){
+            valid=false;
+        }
+        return valid;
+    }
+
+    private boolean check(String text) {
+        boolean bool= false;
+        try{
+            Long x=Long.parseLong(text);
+        }catch (Exception e){
+            bool=true;
+        }
+        return bool;
     }
 
     private void getConductorImg(String imagen) {
@@ -326,10 +427,59 @@ public class AddCarController implements Initializable {
                     break;
             }
         } catch (Exception e) {
-            //TODO
-            System.out.println("No hay imagen");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
+    public void setConductor(Conductor conductor) {
+        this.conductors.add(conductor);
+        this.conductorInDB=false;
+        choiceConductor.getItems().add(conductor.getNit());
+        choiceConductor.setValue(conductor.getNit());
+        nombreLbl.setText(conductor.getNombre());
+        apellidoLbl.setText(conductor.getApellido());
+        telefonoLbl.setText(String.valueOf(conductor.getTelefono()));
+        licenciaLbl.setText(String.valueOf(conductor.getLicencia()));
+        if(conductor.getImagen()!=null)
+            this.setImage(conductor.getImagen());
+    }
+
+    private void setImage(String imagen) {
+        Image image=getImg(imagen);
+        if (imagen!=null){
+            circleImg.setOpacity(1);
+            circleImg.setFill(new ImagePattern(image));
+        }
+    }
+
+    private Image getImg(String img){
+        if (img==null){
+            return null;
+        }else{
+            try{
+                String imageDataBytes = img.substring(img.indexOf(",")+1);
+                InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageDataBytes.getBytes()));
+                Image image= new Image(stream);
+                return image;
+            }
+            catch (Exception e) {
+                return null;
+            }
+        }
+    }
+
+    public void addDoc(Document document) {
+        this.documents.add(document);
+        switch (document.getName()) {
+            case "SOAT":
+                soatLbl.setText(document.getId());
+                break;
+            case "Tecnomecanica":
+                tecnomecanicaLbl.setText(document.getId());
+                break;
+            case "Tarjeta de propiedad":
+                tarjetaLbl.setText(document.getId());
+                break;
+        }
+    }
 }
