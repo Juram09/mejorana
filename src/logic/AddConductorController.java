@@ -8,9 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -19,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.Conductor;
 import models.conductorDAO;
+import org.postgresql.util.PSQLException;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
@@ -28,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddConductorController implements Initializable {
@@ -72,11 +73,25 @@ public class AddConductorController implements Initializable {
    private File selectedFile;
 
    @FXML
-   void add(ActionEvent event) {
+   void add(ActionEvent event) throws IOException {
       if(nitTxt.getText()==null || tipoChoice.getValue()==null || nameTxt.getText()==null || lastnameTxt.getText()==null || phoneTxt.getText()==null || licenseTxt.getText()==null){
-         //TODO:Ventana emergente error
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Todos los campos son obligatorios");
+         alert.showAndWait();
       }else if(check(phoneTxt.getText()) || check(licenseTxt.getText())) {
-         //TODO
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Solo se aceptan números en los campos de teléfono y licencia");
+         alert.showAndWait();
+      }else if(checkDocument()){
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Ya existe un conductor registrado con este documento");
+         alert.showAndWait();
       }else{
          try {
             conductorDAO dao = new conductorDAO();
@@ -87,9 +102,23 @@ public class AddConductorController implements Initializable {
             conductor.setApellido(this.lastnameTxt.getText().substring(0,1).toUpperCase()+this.lastnameTxt.getText().substring(1).toLowerCase());
             conductor.setTelefono(Long.parseLong(this.phoneTxt.getText()));
             conductor.setLicencia(Long.parseLong(this.licenseTxt.getText()));
-            String base = toBase().replace("\n", "").replace("\r", "");
-            conductor.setImagen("data:image/jpeg;base64,"+base);
+            if(this.image!=null){
+               String base = toBase().replace("\n", "").replace("\r", "");
+               conductor.setImagen("data:image/jpeg;base64,"+base);
+            }
             dao.insert(conductor);
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Conductor agregado");
+            alert.setHeaderText(null);
+            alert.setContentText("El conductor se ha agregado exitosamente");
+            alert.showAndWait();
+         } catch (Exception e){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error añadiendo el conductor");
+            alert.showAndWait();
+         }finally {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/addConductor.fxml"));
             Parent root = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
@@ -101,10 +130,18 @@ public class AddConductorController implements Initializable {
             stage.show();
             ((Node)(event.getSource())).getScene().getWindow().hide();
          }
-         catch (Exception e){
-            //TODO: Ventanas emergentes
+      }
+   }
+
+   private boolean checkDocument() {
+      conductorDAO dao=new conductorDAO();
+      List<Conductor> conductors= dao.getAll();
+      for(int i=0;i<conductors.size();i++){
+         if(conductors.get(i).getNit().equals(this.nitTxt.getText())){
+            return true;
          }
       }
+      return false;
    }
 
    private boolean check(String text) {
@@ -119,22 +156,36 @@ public class AddConductorController implements Initializable {
 
    @FXML
    void exit(ActionEvent event) {
-      Platform.exit();
-      System.exit(0);
+      Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+      alert.setTitle("Confirmación para salir");
+      alert.setHeaderText(null);
+      alert.setContentText("¿Está seguro que desea salir? \n No se guardaran los cambios efectuados");
+      Optional<ButtonType> result = alert.showAndWait();
+      if (result.get() == ButtonType.OK){
+         Platform.exit();
+         System.exit(0);
+      }
    }
 
    @FXML
    void goBack(ActionEvent event) throws IOException {
-      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalConductor.fxml"));
-      Parent root = (Parent) fxmlLoader.load();
-      Stage stage = new Stage();
-      stage.initStyle(StageStyle.UNDECORATED);
-      Scene scene = new Scene(root,1280,720);
-      stage.setScene(scene);
-      stage.setTitle ("La mejorana");
-      stage.setResizable(false);
-      stage.show();
-      ((Node)(event.getSource())).getScene().getWindow().hide();
+      Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+      alert.setTitle("Confirmación para salir");
+      alert.setHeaderText(null);
+      alert.setContentText("¿Está seguro que desea volver? \n No se guardaran los cambios efectuados");
+      Optional<ButtonType> result = alert.showAndWait();
+      if (result.get() == ButtonType.OK){
+         ((Node) (event.getSource())).getScene().getWindow().hide();
+         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalConductor.fxml"));
+         Parent root = (Parent) fxmlLoader.load();
+         Stage stage = new Stage();
+         stage.initStyle(StageStyle.UNDECORATED);
+         Scene scene = new Scene(root, 1280, 720);
+         stage.setScene(scene);
+         stage.setTitle("La Mejorana");
+         stage.setResizable(false);
+         stage.show();
+      }
    }
 
    @FXML
@@ -154,7 +205,11 @@ public class AddConductorController implements Initializable {
          img.setOpacity(1);
          img.setFill(new ImagePattern(image));
       }else{
-         //TODO: Ventana emergente error
+         Alert alert=new Alert(Alert.AlertType.INFORMATION);
+         alert.setTitle("Selección de imagen");
+         alert.setHeaderText(null);
+         alert.setContentText("No se ha seleccionado ninguna imagen");
+         alert.showAndWait();
       }
    }
 
@@ -183,7 +238,11 @@ public class AddConductorController implements Initializable {
          imageString = encoder.encode(imageBytes);
          bos.close();
       } catch (IOException e) {
-         e.printStackTrace();
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Error cargando la imagen seleccionada");
+         alert.showAndWait();
       }
       return imageString;
    }

@@ -31,17 +31,21 @@ public class OneObsController {
       Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
       alert.setTitle("Eliminación de observaciones");
       alert.setHeaderText(null);
-      alert.setContentText("¿Desea eliminar la observacion seleccionada?");
-      ButtonType buttonTypeYes = new ButtonType("Sí");
-      ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-      alert.getButtonTypes().setAll(buttonTypeYes,buttonTypeCancel);
-      Optional<ButtonType> result=alert.showAndWait();
-      if(result.get()==buttonTypeYes){
-         carDAO dao=new carDAO();
-         dao.deleteObs(this.id);
-         this.controller.update();
+      alert.setContentText("¿Desea eliminar la observacion seleccionada permanentemente?");
+      Optional<ButtonType> result = alert.showAndWait();
+      if (result.get() == ButtonType.OK){
+         try{
+            carDAO dao=new carDAO();
+            dao.deleteObs(this.id);
+            this.controller.update();
+         }catch(Exception e){
+            Alert alert1=new Alert(Alert.AlertType.ERROR);
+            alert1.setTitle("Error");
+            alert1.setHeaderText(null);
+            alert1.setContentText("Error eliminando la observación");
+            alert1.showAndWait();
+         }
       }
-
    }
 
    public void setObs(Observation observation,OneCarSecondController controller){
@@ -51,5 +55,4 @@ public class OneObsController {
       this.dateLbl.setText(dateFormat.format(observation.getDate()));
       this.obsLbl.setText(observation.getObservation());
    }
-
 }

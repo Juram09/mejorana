@@ -1,6 +1,7 @@
 package models;
 
 import database.DBConnection;
+import logic.logs;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,8 +34,7 @@ public class imagesDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return images;
     }
@@ -52,8 +52,7 @@ public class imagesDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
     public void update(Images img,String placa){
@@ -69,8 +68,7 @@ public class imagesDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
     public void delete(String placa){
@@ -81,8 +79,7 @@ public class imagesDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);;
         }
     }
 }

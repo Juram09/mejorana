@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -78,7 +79,6 @@ public class PrincipalCarController implements Initializable {
         stage.setTitle ("La mejorana");
         stage.setResizable(false);
         stage.show();
-
     }
 
     @FXML
@@ -142,7 +142,11 @@ public class PrincipalCarController implements Initializable {
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando los automoviles");
+            alert.showAndWait();
         }
     }
 
@@ -191,7 +195,11 @@ public class PrincipalCarController implements Initializable {
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando los automoviles");
+            alert.showAndWait();
         }
     }
 }

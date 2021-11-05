@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -136,7 +137,11 @@ public class PrincipalConductorController implements Initializable{
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando los conductores");
+            alert.showAndWait();
         }
     }
     private conductorDAO dao;
@@ -185,7 +190,11 @@ public class PrincipalConductorController implements Initializable{
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando los conductores");
+            alert.showAndWait();
         }
     }
 }

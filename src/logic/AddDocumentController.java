@@ -4,13 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -29,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddDocumentController implements Initializable {
@@ -94,9 +89,9 @@ public class AddDocumentController implements Initializable {
             else{
                 this.controller.addDoc(document);
             }
-            exit(event);
-        }else{
-            //TODO: Ventana emergente error
+            if(controller!=null)
+                this.controller.updateDocs(placaLbl.getText());
+            ((Node)(event.getSource())).getScene().getWindow().hide();
         }
     }
 
@@ -107,9 +102,14 @@ public class AddDocumentController implements Initializable {
 
     @FXML
     void exit(ActionEvent event) {
-        if(controller!=null)
-        this.controller.updateDocs(placaLbl.getText());
-        ((Node)(event.getSource())).getScene().getWindow().hide();
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación para salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea salir? \n No se guardaran los cambios efectuados");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+        }
     }
 
     @FXML
@@ -150,7 +150,11 @@ public class AddDocumentController implements Initializable {
             this.Img.setImage(this.image);
             this.newImg=true;
         }else{
-            //TODO: Ventana emergente error
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Selección de imagen");
+            alert.setHeaderText(null);
+            alert.setContentText("No se ha seleccionado ninguna imagen");
+            alert.showAndWait();
         }
     }
 
@@ -175,15 +179,29 @@ public class AddDocumentController implements Initializable {
             imageString = encoder.encode(imageBytes);
             bos.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando la imagen seleccionada");
+            alert.showAndWait();
         }
         return imageString;
     }
 
     private boolean valid(){
         if(this.numberTxt.getText().isEmpty() || this.comboType.getValue().isEmpty() || this.datePicker.getValue()==null){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Los campos con * son obligatorios");
+            alert.showAndWait();
             return false;
         }else if(this.checkDate.isSelected() && this.datePicker1.getValue()==null){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Se debe introducir fecha de vencimiento del documento \n Si este documento no tiene fecha de vencimiento desmarque la casilla");
+            alert.showAndWait();
             return false;
         }else{
             return true;

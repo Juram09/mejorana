@@ -1,7 +1,7 @@
 package models;
 
 import database.DBConnection;
-import sun.applet.Main;
+import logic.logs;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -32,8 +32,7 @@ public class carDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return cars;
     }
@@ -59,8 +58,7 @@ public class carDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return car;
     }
@@ -81,8 +79,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -102,8 +99,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -116,10 +112,10 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
+
     public void delete(String placa){
         String sql="DELETE FROM car WHERE placa=?;";
         try{
@@ -128,8 +124,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
     //Conductor
@@ -146,11 +141,11 @@ public class carDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return conductor;
     }
+
     //Document
     public List<Document> getDocs(String placa){
         List<Document> docs=new ArrayList<>();
@@ -174,8 +169,7 @@ public class carDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return docs;
     }
@@ -199,8 +193,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -215,8 +208,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -230,8 +222,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
     //Observations
@@ -252,8 +243,7 @@ public class carDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return observations;
     }
@@ -268,8 +258,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -281,8 +270,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -306,8 +294,7 @@ public class carDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return tanks;
     }
@@ -328,6 +315,7 @@ public class carDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
+            logs.makeLog(e);
             return null;
         }
         return tank;
@@ -345,8 +333,7 @@ public class carDAO {
             statement.close();
             updateKm(placa,tank.getKm());
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -359,8 +346,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -386,8 +372,7 @@ public class carDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return maints;
     }
@@ -411,8 +396,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -425,8 +409,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -438,8 +421,7 @@ public class carDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 
@@ -448,5 +430,4 @@ public class carDAO {
         Images image = img.getOne(placa);
         return image;
     }
-
 }

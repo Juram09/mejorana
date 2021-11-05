@@ -9,10 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
@@ -32,6 +29,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class EditCarController implements Initializable {
@@ -172,22 +170,36 @@ public class EditCarController implements Initializable {
 
    @FXML
    void exit(ActionEvent event) {
-      Platform.exit();
-      System.exit(0);
+      Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+      alert.setTitle("Confirmación para salir");
+      alert.setHeaderText(null);
+      alert.setContentText("¿Está seguro que desea salir? \n No se guardaran los cambios efectuados");
+      Optional<ButtonType> result = alert.showAndWait();
+      if (result.get() == ButtonType.OK){
+         Platform.exit();
+         System.exit(0);
+      }
    }
 
    @FXML
    void goBack(ActionEvent event) throws IOException {
-      ((Node) (event.getSource())).getScene().getWindow().hide();
-      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
-      Parent root = (Parent) fxmlLoader.load();
-      Stage stage = new Stage();
-      stage.initStyle(StageStyle.UNDECORATED);
-      Scene scene = new Scene(root, 1280, 720);
-      stage.setScene(scene);
-      stage.setTitle("La Mejorana");
-      stage.setResizable(false);
-      stage.show();
+      Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+      alert.setTitle("Confirmación para salir");
+      alert.setHeaderText(null);
+      alert.setContentText("¿Está seguro que desea volver? \n No se guardaran los cambios efectuados");
+      Optional<ButtonType> result = alert.showAndWait();
+      if (result.get() == ButtonType.OK){
+         ((Node) (event.getSource())).getScene().getWindow().hide();
+         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
+         Parent root = (Parent) fxmlLoader.load();
+         Stage stage = new Stage();
+         stage.initStyle(StageStyle.UNDECORATED);
+         Scene scene = new Scene(root, 1280, 720);
+         stage.setScene(scene);
+         stage.setTitle("La Mejorana");
+         stage.setResizable(false);
+         stage.show();
+      }
    }
 
    @FXML
@@ -207,7 +219,11 @@ public class EditCarController implements Initializable {
          this.Img.setImage(image);
          toBase();
       } else {
-         //TODO: Ventana emergente error
+         Alert alert=new Alert(Alert.AlertType.INFORMATION);
+         alert.setTitle("Selección de imagen");
+         alert.setHeaderText(null);
+         alert.setContentText("No se ha seleccionado ninguna imagen");
+         alert.showAndWait();
       }
    }
 
@@ -295,8 +311,18 @@ public class EditCarController implements Initializable {
       boolean valid=true;
       if(placaTxt.getText().isEmpty() || kmTxt.getText().isEmpty() || colorTxt.getText().isEmpty() || marcaTxt.getText().isEmpty() || modeloTxt.getText().isEmpty() || chasisTxt.getText().isEmpty() || capacidadTxt.getText().isEmpty() || tipoTxt.getText().isEmpty() || choiceConductor.getValue()==null){
          valid=false;
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Todos los campos del apartado de datos son obligatorios, al igual que el conductor designado");
+         alert.showAndWait();
       }else if(check(kmTxt.getText()) || check(modeloTxt.getText()) || check(capacidadTxt.getText())){
          valid=false;
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Solo se aceptan números en los campos de kilometraje, modelo y capacidad");
+         alert.showAndWait();
       }
       return valid;
    }
@@ -326,11 +352,21 @@ public class EditCarController implements Initializable {
    }
 
    private Image getImage(String image) {
-      Image img;
-      String imageDataBytes = image.substring(image.indexOf(",") + 1);
-      InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageDataBytes.getBytes()));
-      img = new Image(stream);
-      return img;
+      Image img = null;
+      try{
+         String imageDataBytes = image.substring(image.indexOf(",") + 1);
+         InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageDataBytes.getBytes()));
+         img=new Image(stream);;
+      }catch(Exception e){
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Error cargando la imagen del automovil");
+         alert.showAndWait();
+         img=null;
+      }finally{
+         return img;
+      }
    }
 
    private void toBase() {
@@ -361,7 +397,11 @@ public class EditCarController implements Initializable {
                break;
          }
       } catch (Exception e) {
-         e.printStackTrace();
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Error cargando la imagen seleccionada");
+         alert.showAndWait();
       }
    }
 
@@ -397,6 +437,11 @@ public class EditCarController implements Initializable {
             return image;
          }
          catch (Exception e) {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando la imagen del conductor");
+            alert.showAndWait();
             return null;
          }
       }

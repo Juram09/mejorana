@@ -11,7 +11,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +30,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 public class OneCarController{
 
@@ -147,7 +150,7 @@ public class OneCarController{
         stage.setTitle("La mejorana");
         stage.setResizable(false);
         OneCarSecondController controller=fxmlLoader.getController();
-        controller.setCar(this.placa);
+        controller.setCar(this.placa,Long.parseLong(this.kmLabel.getText()));
         stage.show();
     }
 
@@ -190,15 +193,33 @@ public class OneCarController{
     }
 
     @FXML
-    void goEdit(ActionEvent event) {
-
+    void goEdit(ActionEvent event) throws IOException {
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/editCar.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        EditCarController controller=fxmlLoader.getController();
+        controller.setCar(this.placasLabel.getText());
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root,1280,720);
+        stage.setScene(scene);
+        stage.setTitle ("La mejorana");
+        stage.setResizable(false);
+        stage.show();
     }
 
     @FXML
     void delete(ActionEvent event) throws IOException {
-        carDAO dao=new carDAO();
-        dao.delete(placasLabel.getText());
-        goBack(event);
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar eliminación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea eliminar este automovil de manera permanente?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            carDAO dao=new carDAO();
+            dao.delete(placasLabel.getText());
+            goBack(event);
+        }
     }
 
     @FXML
@@ -229,25 +250,32 @@ public class OneCarController{
     public void setCar(String placa){
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         this.placa=placa;
-        carDAO dao=new carDAO();
-        this.car=dao.getOne(this.placa);
-        placasLabel.setText(this.placa);
-        kmLabel.setText(String.valueOf(car.getKm()));
-        colorLabel.setText(String.valueOf(car.getColor()));
-        marcaLabel.setText(String.valueOf(car.getMarca()));
-        modeloLabel.setText(String.valueOf(car.getModelo()));
-        chasisLabel.setText(String.valueOf(car.getChasis()));
-        capacidadLabel.setText(String.valueOf(car.getCapacidad()));
-        tipoLabel.setText(car.getTipo());
-        show(car.getImgs().getFrontal());
-        List<Tank> tanks=dao.getTanks(this.placa);
-        XYChart.Series series=new XYChart.Series();
-        for(int i=tanks.size()-1;i>0;i--){
-            series.getData().add(new XYChart.Data<>(dateFormat.format(tanks.get(i).getFecha()),tanks.get(i).getGalonesPerKm()));
+        try{
+            carDAO dao=new carDAO();
+            this.car=dao.getOne(this.placa);
+            placasLabel.setText(this.placa);
+            kmLabel.setText(String.valueOf(car.getKm()));
+            colorLabel.setText(String.valueOf(car.getColor()));
+            marcaLabel.setText(String.valueOf(car.getMarca()));
+            modeloLabel.setText(String.valueOf(car.getModelo()));
+            chasisLabel.setText(String.valueOf(car.getChasis()));
+            capacidadLabel.setText(String.valueOf(car.getCapacidad()));
+            tipoLabel.setText(car.getTipo());
+            show(car.getImgs().getFrontal());
+            List<Tank> tanks=dao.getTanks(this.placa);
+            XYChart.Series series=new XYChart.Series();
+            for(int i=tanks.size()-1;i>0;i--){
+                series.getData().add(new XYChart.Data<>(dateFormat.format(tanks.get(i).getFecha()),tanks.get(i).getGalonesPerKm()));
+            }
+            series.setName("Galones por km recorrido");
+            grafica.getData().addAll(series);
+        }catch(Exception e){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando el automovil seleccionada");
+            alert.showAndWait();
         }
-        series.setName("Galones por km recorrido");
-        grafica.getData().addAll(series);
-        //grafica.setCreateSymbols(false);
     }
     private void show(String image){
         Image img;
@@ -263,7 +291,11 @@ public class OneCarController{
             carImg.setImage(img);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando la imagen seleccionada");
+            alert.showAndWait();
         }
     }
 

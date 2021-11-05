@@ -1,6 +1,7 @@
 package models;
 
 import database.DBConnection;
+import logic.logs;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,8 +37,7 @@ public class conductorDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return conductors;
     }
@@ -60,8 +60,7 @@ public class conductorDAO {
             data.close();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
         return conductor;
     }
@@ -79,8 +78,7 @@ public class conductorDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
     public void update(Conductor conductor){
@@ -97,8 +95,7 @@ public class conductorDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
     public void delete(String nit){
@@ -109,8 +106,7 @@ public class conductorDAO {
             statement.execute();
             statement.close();
         }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logs.makeLog(e);
         }
     }
 }

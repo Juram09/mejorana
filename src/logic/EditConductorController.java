@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -27,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.util.Base64;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class EditConductorController implements Initializable {
@@ -85,14 +83,28 @@ public class EditConductorController implements Initializable {
             img.setOpacity(1);
             img.setFill(new ImagePattern(image));
         }else{
-            //TODO: Ventana emergente error
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Selección de imagen");
+            alert.setHeaderText(null);
+            alert.setContentText("No se ha seleccionado ninguna imagen");
+            alert.showAndWait();
         }
     }
 
     @FXML
-    void edit(ActionEvent event) {
+    void edit(ActionEvent event) throws IOException {
         if(tipoChoice.getValue()==null || nameTxt.getText()==null || lastnameTxt.getText()==null || phoneTxt.getText()==null || licenseTxt.getText()==null){
-            //TODO: Ventana emergente error
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Todos los campos son obligatorios");
+            alert.showAndWait();
+        }else if(check(phoneTxt.getText()) || check(licenseTxt.getText())) {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Solo se aceptan números en los campos de teléfono y licencia");
+            alert.showAndWait();
         }else{
             try {
                 conductorDAO dao = new conductorDAO();
@@ -110,7 +122,19 @@ public class EditConductorController implements Initializable {
                     conductor.setImagen(this.basesf);
                 }
                 dao.update(conductor);
-                //TODO: Ventana emergente exito
+                Alert alert=new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Conductor agregado");
+                alert.setHeaderText(null);
+                alert.setContentText("El conductor se ha agregado exitosamente");
+                alert.showAndWait();
+            }
+            catch (Exception e){
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Error añadiendo el conductor");
+                alert.showAndWait();
+            }finally{
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalConductor.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
@@ -122,31 +146,51 @@ public class EditConductorController implements Initializable {
                 stage.show();
                 ((Node)(event.getSource())).getScene().getWindow().hide();
             }
-            catch (Exception e){
-                e.printStackTrace();
-                //TODO: Ventanas emergentes
-            }
         }
+    }
+
+    private boolean check(String text) {
+        boolean bool= false;
+        try{
+            Long x=Long.parseLong(text);
+        }catch (Exception e){
+            bool=true;
+        }
+        return bool;
     }
 
     @FXML
     void exit(ActionEvent event) {
-        Platform.exit();
-        System.exit(0);
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación para salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea salir? \n No se guardaran los cambios efectuados");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            Platform.exit();
+            System.exit(0);
+        }
     }
 
     @FXML
     void goBack(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalConductor.fxml"));
-        Parent root = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED);
-        Scene scene = new Scene(root,1280,720);
-        stage.setScene(scene);
-        stage.setTitle ("La mejorana");
-        stage.setResizable(false);
-        stage.show();
-        ((Node)(event.getSource())).getScene().getWindow().hide();
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación para salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea volver? \n No se guardaran los cambios efectuados");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            ((Node) (event.getSource())).getScene().getWindow().hide();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalConductor.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            Scene scene = new Scene(root, 1280, 720);
+            stage.setScene(scene);
+            stage.setTitle("La Mejorana");
+            stage.setResizable(false);
+            stage.show();
+        }
     }
 
     @FXML
@@ -179,7 +223,11 @@ public class EditConductorController implements Initializable {
             imageString = encoder.encode(imageBytes);
             bos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Selección de imagen");
+            alert.setHeaderText(null);
+            alert.setContentText("No se ha seleccionado ninguna imagen");
+            alert.showAndWait();
         }
         return imageString;
     }
@@ -211,6 +259,11 @@ public class EditConductorController implements Initializable {
                 return image;
             }
             catch (Exception e) {
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Error cargando la imagen del conductor");
+                alert.showAndWait();
                 return null;
             }
         }

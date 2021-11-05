@@ -5,12 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -24,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddMaintController implements Initializable{
@@ -83,16 +79,21 @@ public class AddMaintController implements Initializable{
             }
             maint.setActive(true);
             this.controller.addMaint(maint);
-            exit(event);
-        }else{
-            //TODO: Ventana emergente error
+            this.controller.updateMaints(this.placa);
+            ((Node)(event.getSource())).getScene().getWindow().hide();
         }
     }
 
     @FXML
     void exit(ActionEvent event) {
-        this.controller.updateMaints(this.placa);
-        ((Node)(event.getSource())).getScene().getWindow().hide();
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación para salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea salir? \n No se guardaran los cambios efectuados");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+        }
     }
 
     @FXML
@@ -113,7 +114,11 @@ public class AddMaintController implements Initializable{
             this.image=new Image(this.selectedFile.toURI().toString());
             this.img.setImage(this.image);
         }else{
-            //TODO: Ventana emergente error
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Selección de imagen");
+            alert.setHeaderText(null);
+            alert.setContentText("No se ha seleccionado ninguna imagen");
+            alert.showAndWait();
         }
     }
 
@@ -133,14 +138,46 @@ public class AddMaintController implements Initializable{
 
     private boolean valid(){
         if(this.kmTxt.getText().isEmpty() || this.tipoCombo.getValue().isEmpty() || this.datePicker.getValue()==null){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Los campos con * son obligatorios");
+            alert.showAndWait();
             return false;
         }else if(this.checkNext.isSelected() && this.kmTxt1.getText().isEmpty()){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Se debe introducir el kilometraje para el proximo mantenimiento de este tipo\n Si no tiene proximo mantenimiento de este tipo programado en km desmarque la casilla");
+            alert.showAndWait();
+            return false;
+        }else if(!isLong()){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("El kilometraje no es valido\n Si no tiene proximo mantenimiento de este tipo programado en km desmarque la casilla");
+            alert.showAndWait();
             return false;
         }else if(Long.parseLong(this.kmTxt1.getText())<this.actualKm){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("El kilometraje del mantenimiento siguiente es menor al kilometraje actual\n Si no tiene proximo mantenimiento de este tipo programado en km desmarque la casilla");
+            alert.showAndWait();
             return false;
-        }else {
+        }else{
             return true;
         }
+    }
+
+    private boolean isLong() {
+        boolean xd=true;
+        try{
+            xd=Long.parseLong(this.kmTxt1.getText())>0 && Long.parseLong(this.kmTxt1.getText())>0;
+        }catch (Exception e){
+            xd=false;
+        }
+        return xd;
     }
 
     private String getImage(){
@@ -154,7 +191,11 @@ public class AddMaintController implements Initializable{
             imageString = encoder.encode(imageBytes);
             bos.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando la imagen seleccionada");
+            alert.showAndWait();
         }
         return imageString;
     }

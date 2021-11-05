@@ -21,6 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.*;
@@ -32,6 +33,7 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class OneCarSecondController{
 
@@ -118,48 +120,150 @@ public class OneCarSecondController{
 
    carDAO dao=new carDAO();
    private List<Observation> observations;
+   private Long actualKm;
 
    @FXML
-   void addTanq(ActionEvent event) {
-
+   void addTanq(ActionEvent event) throws IOException {
+      this.blackUnfocus.setOpacity(1);
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/addTanq.fxml"));
+      Parent root = (Parent) fxmlLoader.load();
+      Stage stage = new Stage();
+      stage.initStyle(StageStyle.UNDECORATED);
+      Scene scene = new Scene(root, 690, 422);
+      stage.setScene(scene);
+      stage.setTitle("La mejorana");
+      stage.setResizable(false);
+      AddTanqController controller =fxmlLoader.getController();
+      controller.setCar(this.placaLbl.getText());
+      stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
+      stage.initModality(Modality.WINDOW_MODAL);
+      stage.showAndWait();
+      this.blackUnfocus.setOpacity(0);
+      this.setCar(this.placaLbl.getText(),this.actualKm);
    }
 
    @FXML
    void addObs(ActionEvent event) {
-      this.dao.insertObs(this.obsTxt.getText(),this.placaLbl.getText());
-      this.obsTxt.setText("");
-      //TODO: Alert
-      this.update();
+      try{
+         this.dao.insertObs(this.obsTxt.getText(),this.placaLbl.getText());
+         this.obsTxt.setText("");
+         this.update();
+         Alert alert=new Alert(Alert.AlertType.INFORMATION);
+         alert.setTitle("Conductor agregado");
+         alert.setHeaderText(null);
+         alert.setContentText("La observación se ha agregado exitosamente");
+         alert.showAndWait();
+      }catch(Exception e){
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Error agregando la observación");
+         alert.showAndWait();
+      }
    }
 
    @FXML
-   void delete(ActionEvent event) {
-
+   void delete(ActionEvent event) throws IOException {
+      Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+      alert.setTitle("Confirmar eliminación");
+      alert.setHeaderText(null);
+      alert.setContentText("¿Está seguro que desea eliminar este automovil de manera permanente?");
+      Optional<ButtonType> result = alert.showAndWait();
+      if (result.get() == ButtonType.OK){
+         carDAO dao=new carDAO();
+         dao.delete(placaLbl.getText());
+         goBack(event);
+      }
    }
 
    @FXML
    void exit(ActionEvent event) {
-      Platform.exit();
-      System.exit(0);
+      if(!obsTxt.getText().isEmpty()){
+         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+         alert.setTitle("Confirmación para salir");
+         alert.setHeaderText(null);
+         alert.setContentText("¿Está seguro que desea salir? \n No se guardarán las observaciones que no están agregadas");
+         Optional<ButtonType> result = alert.showAndWait();
+         if (result.get() == ButtonType.OK){
+            Platform.exit();
+            System.exit(0);
+         }
+      }else{
+         Platform.exit();
+         System.exit(0);
+      }
    }
 
    @FXML
    void goBack(ActionEvent event) throws IOException {
-      ((Node)(event.getSource())).getScene().getWindow().hide();
-      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
-      Parent root = (Parent) fxmlLoader.load();
-      Stage stage = new Stage();
-      stage.initStyle(StageStyle.UNDECORATED);
-      Scene scene = new Scene(root,1280,720);
-      stage.setScene(scene);
-      stage.setTitle ("La mejorana");
-      stage.setResizable(false);
-      stage.show();
+      if(!obsTxt.getText().isEmpty()){
+         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+         alert.setTitle("Confirmación para salir");
+         alert.setHeaderText(null);
+         alert.setContentText("¿Está seguro que desea salir? \n No se guardarán las observaciones que no están agregadas");
+         Optional<ButtonType> result = alert.showAndWait();
+         if (result.get() == ButtonType.OK){
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            Scene scene = new Scene(root,1280,720);
+            stage.setScene(scene);
+            stage.setTitle ("La mejorana");
+            stage.setResizable(false);
+            stage.show();
+         }
+      }else{
+         ((Node)(event.getSource())).getScene().getWindow().hide();
+         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
+         Parent root = (Parent) fxmlLoader.load();
+         Stage stage = new Stage();
+         stage.initStyle(StageStyle.UNDECORATED);
+         Scene scene = new Scene(root,1280,720);
+         stage.setScene(scene);
+         stage.setTitle ("La mejorana");
+         stage.setResizable(false);
+         stage.show();
+      }
    }
 
    @FXML
-   void goEdit(ActionEvent event) {
-
+   void goEdit(ActionEvent event) throws IOException {
+      if(!obsTxt.getText().isEmpty()){
+         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+         alert.setTitle("Confirmación para salir");
+         alert.setHeaderText(null);
+         alert.setContentText("¿Está seguro que desea salir? \n No se guardarán las observaciones que no están agregadas");
+         Optional<ButtonType> result = alert.showAndWait();
+         if (result.get() == ButtonType.OK){
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/editCar.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            EditCarController controller=fxmlLoader.getController();
+            controller.setCar(this.placaLbl.getText());
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            Scene scene = new Scene(root,1280,720);
+            stage.setScene(scene);
+            stage.setTitle ("La mejorana");
+            stage.setResizable(false);
+            stage.show();
+         }
+      }else{
+         ((Node)(event.getSource())).getScene().getWindow().hide();
+         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/editCar.fxml"));
+         Parent root = (Parent) fxmlLoader.load();
+         EditCarController controller=fxmlLoader.getController();
+         controller.setCar(this.placaLbl.getText());
+         Stage stage = new Stage();
+         stage.initStyle(StageStyle.UNDECORATED);
+         Scene scene = new Scene(root,1280,720);
+         stage.setScene(scene);
+         stage.setTitle ("La mejorana");
+         stage.setResizable(false);
+         stage.show();
+      }
    }
 
    @FXML
@@ -169,33 +273,84 @@ public class OneCarSecondController{
 
    @FXML
    void nextPg(ActionEvent event) throws IOException {
-      ((Node)(event.getSource())).getScene().getWindow().hide();
-      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/oneCar.fxml"));
+      if(!obsTxt.getText().isEmpty()) {
+         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+         alert.setTitle("Confirmación para salir");
+         alert.setHeaderText(null);
+         alert.setContentText("¿Está seguro que desea salir? \n No se guardarán las observaciones que no están agregadas");
+         Optional<ButtonType> result = alert.showAndWait();
+         if (result.get() == ButtonType.OK) {
+            ((Node) (event.getSource())).getScene().getWindow().hide();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/oneCar.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            OneCarController controller = fxmlLoader.getController();
+            controller.setCar(placaLbl.getText());
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            Scene scene = new Scene(root, 1280, 720);
+            stage.setScene(scene);
+            stage.setTitle("La mejorana");
+            stage.setResizable(false);
+            stage.show();
+         }
+      }else{
+         ((Node) (event.getSource())).getScene().getWindow().hide();
+         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/oneCar.fxml"));
+         Parent root = (Parent) fxmlLoader.load();
+         OneCarController controller = fxmlLoader.getController();
+         controller.setCar(placaLbl.getText());
+         Stage stage = new Stage();
+         stage.initStyle(StageStyle.UNDECORATED);
+         Scene scene = new Scene(root, 1280, 720);
+         stage.setScene(scene);
+         stage.setTitle("La mejorana");
+         stage.setResizable(false);
+         stage.show();
+      }
+   }
+
+   @FXML
+   void viewDoc(ActionEvent event) throws IOException {
+      this.blackUnfocus.setOpacity(1);
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/viewDocs.fxml"));
       Parent root = (Parent) fxmlLoader.load();
-      OneCarController controller=fxmlLoader.getController();
-      controller.setCar(placaLbl.getText());
       Stage stage = new Stage();
       stage.initStyle(StageStyle.UNDECORATED);
-      Scene scene = new Scene(root,1280,720);
+      Scene scene = new Scene(root, 535, 535);
       stage.setScene(scene);
-      stage.setTitle ("La mejorana");
+      stage.setTitle("La mejorana");
       stage.setResizable(false);
-      stage.show();
+      ViewDocsController controller=fxmlLoader.getController();
+      controller.setDocs(this.placaLbl.getText());
+      stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
+      stage.initModality(Modality.WINDOW_MODAL);
+      stage.showAndWait();
+      this.blackUnfocus.setOpacity(0);
    }
 
    @FXML
-   void viewDoc(ActionEvent event) {
-
+   void viewMant(ActionEvent event) throws IOException {
+      this.blackUnfocus.setOpacity(1);
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/viewMaints.fxml"));
+      Parent root = (Parent) fxmlLoader.load();
+      Stage stage = new Stage();
+      stage.initStyle(StageStyle.UNDECORATED);
+      Scene scene = new Scene(root, 535, 535);
+      stage.setScene(scene);
+      stage.setTitle("La mejorana");
+      stage.setResizable(false);
+      ViewMaintsController controller=fxmlLoader.getController();
+      controller.setMaints(this.placaLbl.getText(),this.actualKm);
+      stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
+      stage.initModality(Modality.WINDOW_MODAL);
+      stage.showAndWait();
+      this.blackUnfocus.setOpacity(0);
    }
 
-   @FXML
-   void viewMant(ActionEvent event) {
-
-   }
-
-   public void setCar(String placa){
+   public void setCar(String placa,Long km){
       this.placaLbl.setText(placa);
       this.observations = this.dao.getObs(placa);
+      this.actualKm=km;
       int row = 0;
       if (observations.size() > 0) {
          this.obsLbl.setOpacity(0);
@@ -221,26 +376,38 @@ public class OneCarSecondController{
                GridPane.setMargin(anchorPane, new Insets(0, 0, 5, 0));
             }
          } catch (IOException e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando las observaciones");
+            alert.showAndWait();
          }
       } else {
          this.obsLbl.setOpacity(1);
          this.scroll.setOpacity(0);
       }
-      conductorDAO cdao = new conductorDAO();
-      Conductor conductor = cdao.getOne(dao.getConductor(placa));
-      documentoLbl.setText(String.valueOf(conductor.getNit()));
-      nombreLbl.setText(String.valueOf(conductor.getNombre()));
-      apellidoLbl.setText(String.valueOf(conductor.getApellido()));
-      TelefonoLbl.setText(String.valueOf(conductor.getTelefono()));
-      LicenciaLbl.setText(String.valueOf(conductor.getLicencia()));
-      show(conductor.getImagen());
+      try{
+         conductorDAO cdao = new conductorDAO();
+         Conductor conductor = cdao.getOne(dao.getConductor(placa));
+         documentoLbl.setText(String.valueOf(conductor.getNit()));
+         nombreLbl.setText(String.valueOf(conductor.getNombre()));
+         apellidoLbl.setText(String.valueOf(conductor.getApellido()));
+         TelefonoLbl.setText(String.valueOf(conductor.getTelefono()));
+         LicenciaLbl.setText(String.valueOf(conductor.getLicencia()));
+         show(conductor.getImagen());
+      }catch(Exception e){
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Error cargando el conductor");
+         alert.showAndWait();
+      }
       fill();
    }
 
    public void update() {
       grid.getChildren().clear();
-      setCar(this.placaLbl.getText());
+      setCar(this.placaLbl.getText(),this.actualKm);
    }
 
    private void show(String image){
@@ -256,19 +423,31 @@ public class OneCarSecondController{
          conductorImg.setFill(new ImagePattern(img));
       }
       catch (Exception e) {
-         e.printStackTrace();
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Error cargando la imagen del conductor");
+         alert.showAndWait();
       }
    }
 
    private void fill(){
-      carDAO dao=new carDAO();
-      List<Tank> tanks=dao.getTanks(this.placaLbl.getText());
-      ObservableList<Tank> tanqs = FXCollections.observableArrayList(tanks);
-      kmColumn.setCellValueFactory(new PropertyValueFactory<>("km"));
-      tanqueoColumn.setCellValueFactory(new PropertyValueFactory<>("galones"));
-      galonPKmColumn.setCellValueFactory(new PropertyValueFactory<>("galonesPerKm"));
-      dateColumn.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-      table.setItems(tanqs);
+      try{
+         carDAO dao=new carDAO();
+         List<Tank> tanks=dao.getTanks(this.placaLbl.getText());
+         ObservableList<Tank> tanqs = FXCollections.observableArrayList(tanks);
+         kmColumn.setCellValueFactory(new PropertyValueFactory<>("km"));
+         tanqueoColumn.setCellValueFactory(new PropertyValueFactory<>("galones"));
+         galonPKmColumn.setCellValueFactory(new PropertyValueFactory<>("galonesPerKm"));
+         dateColumn.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+         table.setItems(tanqs);
+      }catch(Exception e){
+         Alert alert=new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Error");
+         alert.setHeaderText(null);
+         alert.setContentText("Error cargando el historial de tanqueos");
+         alert.showAndWait();
+      }
    }
 }
 

@@ -1,0 +1,12 @@
+nov 04, 2021 9:21:37 PM logic.logs makeLog
+INFORMACIÓN: Log: org.postgresql.util.PSQLException: ERROR: llave duplicada viola restricción de unicidad «car_pkey»
+  Detail: Ya existe la llave (placa)=(SXU660).
+nov 04, 2021 9:21:37 PM logic.logs makeLog
+INFORMACIÓN: Log: org.postgresql.util.PSQLException: ERROR: llave duplicada viola restricción de unicidad «imagenes_pkey»
+  Detail: Ya existe la llave (placa)=(SXU660).
+nov 04, 2021 9:23:43 PM logic.logs makeLog
+INFORMACIÓN: Log: org.postgresql.util.PSQLException: ERROR: llave duplicada viola restricción de unicidad «car_pkey»
+  Detail: Ya existe la llave (placa)=(SXU660).
+nov 04, 2021 9:23:43 PM logic.logs makeLog
+INFORMACIÓN: Log: org.postgresql.util.PSQLException: ERROR: llave duplicada viola restricción de unicidad «imagenes_pkey»
+  Detail: Ya existe la llave (placa)=(SXU660).

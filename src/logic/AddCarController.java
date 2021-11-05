@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
@@ -23,14 +20,10 @@ import javafx.stage.StageStyle;
 import models.*;
 import sun.misc.BASE64Encoder;
 import javax.imageio.ImageIO;
-import javax.print.Doc;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AddCarController implements Initializable {
 
@@ -137,28 +130,60 @@ public class AddCarController implements Initializable {
     private List<Document> documents=new ArrayList<>();
     private boolean conductorInDB;
     private Conductor conductor;
+    private String placa;
 
     @FXML
-    void add(ActionEvent event) {
+    void add(ActionEvent event) throws IOException {
         if(this.validate()){
-            Car car=new Car();
-            car.setPlaca(this.placaTxt.getText());
-            car.setKm(Long.parseLong(this.kmTxt.getText()));
-            car.setTipo(this.tipoTxt.getText());
-            car.setCapacidad(Integer.parseInt(this.capacidadTxt.getText()));
-            car.setChasis(this.chasisTxt.getText());
-            car.setColor(this.colorTxt.getText());
-            car.setMarca(this.marcaTxt.getText());
-            car.setModelo(Integer.parseInt(this.modeloTxt.getText()));
-            if(!this.conductorInDB){
-                insertConductor();
+            try{
+                this.placa=format();
+                Car car=new Car();
+                car.setPlaca(this.placa);
+                car.setKm(Long.parseLong(this.kmTxt.getText()));
+                car.setTipo(this.tipoTxt.getText());
+                car.setCapacidad(Integer.parseInt(this.capacidadTxt.getText()));
+                car.setChasis(this.chasisTxt.getText());
+                car.setColor(this.colorTxt.getText());
+                car.setMarca(this.marcaTxt.getText());
+                car.setModelo(Integer.parseInt(this.modeloTxt.getText()));
+                if(!this.conductorInDB){
+                    insertConductor();
+                }
+                car.setConductor(this.choiceConductor.getValue());
+                carDAO dao=new carDAO();
+                dao.insert(car);
+                insertImgs();
+                insertDocuments();
+                Alert alert=new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Automovil agregado");
+                alert.setHeaderText(null);
+                alert.setContentText("El automovil se ha agregado correctamente");
+                alert.showAndWait();
+            }catch(Exception e){
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Error añadiendo el automovil");
+                alert.showAndWait();
+            }finally{
+                ((Node) (event.getSource())).getScene().getWindow().hide();
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.initStyle(StageStyle.UNDECORATED);
+                Scene scene = new Scene(root, 1280, 720);
+                stage.setScene(scene);
+                stage.setTitle("La Mejorana");
+                stage.setResizable(false);
+                stage.show();
             }
-            car.setConductor(this.choiceConductor.getValue());
-            carDAO dao=new carDAO();
-            dao.insert(car);
-            insertImgs();
-            insertDocuments();
         }
+    }
+
+    private String format() {
+        String placa=this.placaTxt.getText().replace("\n", "").replace("\r", "").replace("-","");
+        placa=placa.toUpperCase();
+        return placa;
     }
 
     @FXML
@@ -192,7 +217,7 @@ public class AddCarController implements Initializable {
         stage.setTitle("La mejorana");
         stage.setResizable(false);
         AddDocumentController controller=fxmlLoader.getController();
-        controller.setCar(placaTxt.getText(),this);
+        controller.setCar(this.placa,this);
         stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.showAndWait();
@@ -211,7 +236,11 @@ public class AddCarController implements Initializable {
             this.Img.setImage(image);
             toBase();
         } else {
-            //TODO: Ventana emergente error
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Selección de imagen");
+            alert.setHeaderText(null);
+            alert.setContentText("No se ha seleccionado ninguna imagen");
+            alert.showAndWait();
         }
     }
 
@@ -287,22 +316,36 @@ public class AddCarController implements Initializable {
 
     @FXML
     void exit(ActionEvent event) {
-        Platform.exit();
-        System.exit(0);
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación para salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea salir? \n No se guardaran los cambios efectuados");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            Platform.exit();
+            System.exit(0);
+        }
     }
 
     @FXML
     void goBack(ActionEvent event) throws IOException {
-        ((Node) (event.getSource())).getScene().getWindow().hide();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
-        Parent root = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED);
-        Scene scene = new Scene(root, 1280, 720);
-        stage.setScene(scene);
-        stage.setTitle("La Mejorana");
-        stage.setResizable(false);
-        stage.show();
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación para salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea volver? \n No se guardaran los cambios efectuados");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            ((Node) (event.getSource())).getScene().getWindow().hide();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalCar.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            Scene scene = new Scene(root, 1280, 720);
+            stage.setScene(scene);
+            stage.setTitle("La Mejorana");
+            stage.setResizable(false);
+            stage.show();
+        }
     }
 
     @FXML
@@ -343,13 +386,13 @@ public class AddCarController implements Initializable {
     private void insertDocuments() {
         carDAO dao=new carDAO();
         for(int i=0;i<this.documents.size();i++){
-            dao.insertDoc(this.documents.get(i),this.placaTxt.getText());
+            dao.insertDoc(this.documents.get(i),this.placa);
         }
     }
 
     private void insertImgs() {
         imagesDAO dao=new imagesDAO();
-        dao.insert(this.imgs, this.placaTxt.getText());
+        dao.insert(this.imgs, this.placa);
     }
 
     private void insertConductor() {
@@ -361,10 +404,38 @@ public class AddCarController implements Initializable {
         boolean valid=true;
         if(placaTxt.getText().isEmpty() || kmTxt.getText().isEmpty() || colorTxt.getText().isEmpty() || marcaTxt.getText().isEmpty() || modeloTxt.getText().isEmpty() || chasisTxt.getText().isEmpty() || capacidadTxt.getText().isEmpty() || tipoTxt.getText().isEmpty() || choiceConductor.getValue()==null){
             valid=false;
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Todos los campos del apartado de datos son obligatorios, al igual que el conductor designado");
+            alert.showAndWait();
         }else if(check(kmTxt.getText()) || check(modeloTxt.getText()) || check(capacidadTxt.getText())){
             valid=false;
-        }
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Solo se aceptan números en los campos de kilometraje, modelo y capacidad");
+            alert.showAndWait();
+        }/*else if(checkDocument()) {
+            valid=false;
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Ya existe un automovil registrado con esta placa");
+            alert.showAndWait();
+        }*/
         return valid;
+    }
+
+    private boolean checkDocument() {
+        carDAO dao=new carDAO();
+        List<Car> cars= dao.getAll();
+        for(int i=0;i<cars.size();i++){
+            if(cars.get(i).getPlaca().equals(this.placa)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean check(String text) {
@@ -427,7 +498,11 @@ public class AddCarController implements Initializable {
                     break;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error cargando la imagen seleccionada");
+            alert.showAndWait();
         }
     }
 
@@ -463,6 +538,11 @@ public class AddCarController implements Initializable {
                 return image;
             }
             catch (Exception e) {
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Error cargando la imagen del conductor");
+                alert.showAndWait();
                 return null;
             }
         }
