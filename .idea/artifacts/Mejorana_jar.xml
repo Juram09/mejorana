@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Mejorana:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Mejorana_jar</output-path>
+    <root id="archive" name="Mejorana.jar">
+      <element id="module-output" name="Mejorana" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Descargas/postgresql-42.2.23.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/database/mybatis-3.4.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
