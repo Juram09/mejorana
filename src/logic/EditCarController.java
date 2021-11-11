@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,8 +24,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -128,24 +125,50 @@ public class EditCarController implements Initializable {
    private Car car;
 
    @FXML
-   void edit(ActionEvent event) {
+   void edit(ActionEvent event) throws IOException {
       if (validate()){
-         Car car=new Car();
-         car.setPlaca(this.placaTxt.getText());
-         car.setKm(Long.parseLong(this.kmTxt.getText()));
-         car.setTipo(this.tipoTxt.getText());
-         car.setCapacidad(Integer.parseInt(this.capacidadTxt.getText()));
-         car.setChasis(this.chasisTxt.getText());
-         car.setColor(this.colorTxt.getText());
-         car.setMarca(this.marcaTxt.getText());
-         car.setModelo(Integer.parseInt(this.modeloTxt.getText()));
-         if(!this.conductorInDB){
-            insertConductor();
+         try{
+            Car car=new Car();
+            car.setPlaca(this.placaTxt.getText());
+            car.setKm(Long.parseLong(this.kmTxt.getText()));
+            car.setTipo(this.tipoTxt.getText());
+            car.setCapacidad(Integer.parseInt(this.capacidadTxt.getText()));
+            car.setChasis(this.chasisTxt.getText());
+            car.setColor(this.colorTxt.getText());
+            car.setMarca(this.marcaTxt.getText());
+            car.setModelo(Integer.parseInt(this.modeloTxt.getText()));
+            if(!this.conductorInDB){
+               insertConductor();
+            }
+            car.setConductor(this.choiceConductor.getValue());
+            carDAO dao=new carDAO();
+            dao.update(car);
+            insertImgs();
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Automovil editado");
+            alert.setHeaderText(null);
+            alert.setContentText("El automovil se ha editado exitosamente");
+            alert.showAndWait();
+         }catch(Exception e){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error editando el automovil");
+            alert.showAndWait();
+         }finally{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui/OneCarController.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            OneCarController controller=fxmlLoader.getController();
+            controller.setCar(placaTxt.getText());
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            Scene scene = new Scene(root,1280,720);
+            stage.setScene(scene);
+            stage.setTitle ("La mejorana");
+            stage.setResizable(false);
+            stage.show();
          }
-         car.setConductor(this.choiceConductor.getValue());
-         carDAO dao=new carDAO();
-         dao.update(car);
-         insertImgs();
+
       }
    }
 

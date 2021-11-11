@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="535.0" prefWidth="755.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.AddConductorEmergentController">
+<AnchorPane prefHeight="535.0" prefWidth="755.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logic.AddConductorEmergentController">
    <children>
       <ImageView fitHeight="535.0" fitWidth="755.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -55,6 +55,6 @@
             <Font name="Century Gothic" size="16.0" />
          </font>
       </TextField>
-      <ChoiceBox fx:id="tipoChoice" layoutX="370.0" layoutY="174.0" prefHeight="25.0" prefWidth="349.0" styleClass="transparent" />
+      <ChoiceBox fx:id="tipoChoice" layoutX="363.0" layoutY="172.0" prefHeight="25.0" prefWidth="349.0" styleClass="transparent" />
    </children>
 </AnchorPane>

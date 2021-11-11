@@ -8,15 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
-import javafx.scene.paint.ImagePattern;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Document;
 import sun.misc.BASE64Encoder;
-import sun.util.resources.LocaleData;
 
 import javax.imageio.ImageIO;
-import javax.print.Doc;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -196,11 +193,11 @@ public class AddDocumentController implements Initializable {
             alert.setContentText("Los campos con * son obligatorios");
             alert.showAndWait();
             return false;
-        }else if(this.checkDate.isSelected() && this.datePicker1.getValue()==null){
+        }else if((this.checkDate.isSelected() && this.datePicker1.getValue()==null) ||(java.sql.Date.valueOf(datePicker1.getValue()).getTime()<=java.sql.Date.valueOf(datePicker.getValue()).getTime())){
             Alert alert=new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("Se debe introducir fecha de vencimiento del documento \n Si este documento no tiene fecha de vencimiento desmarque la casilla");
+            alert.setContentText("Se debe introducir fecha de vencimiento del documento y esta fecha debe ser mayor a la fecha de expedición \n Si este documento no tiene fecha de vencimiento desmarque la casilla");
             alert.showAndWait();
             return false;
         }else{

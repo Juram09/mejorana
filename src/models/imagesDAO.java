@@ -17,6 +17,30 @@ public class imagesDAO {
         connection=new DBConnection().getConnection();
     }
 
+    public List<Images> getAll(){
+        String sql="SELECT * FROM imagenes;";
+        List<Images> images=new ArrayList<>();
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet data=statement.executeQuery();
+            while(data.next()){
+                Images image=new Images();
+                image.setPlaca(data.getString("placa"));
+                image.setFrontal(data.getString("frontal"));
+                image.setTrasera(data.getString("trasera"));
+                image.setLatDer(data.getString("derecha"));
+                image.setLatIzq(data.getString("izquierda"));
+                image.setCabin(data.getString("cabina"));
+                images.add(image);
+            }
+            data.close();
+            statement.close();
+        }catch(SQLException e){
+            logs.makeLog(e);
+        }
+        return images;
+    }
+
     public Images getOne(String placa){
         String sql="SELECT * FROM imagenes WHERE placa=?;";
         Images images=new Images();

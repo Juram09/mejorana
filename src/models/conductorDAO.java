@@ -41,6 +41,7 @@ public class conductorDAO {
         }
         return conductors;
     }
+
     public Conductor getOne(String nit){
         Conductor conductor=new Conductor();
         String sql="SELECT * FROM conductor WHERE nit=?;";

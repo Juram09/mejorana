@@ -13,7 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -26,7 +26,6 @@ import models.carDAO;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class PrincipalCarController implements Initializable {
@@ -60,11 +59,26 @@ public class PrincipalCarController implements Initializable {
     @FXML
     private Button bckupBtn;
 
+    @FXML
+    private ImageView blackUnfocus;
+
     private carDAO dao;
 
     @FXML
-    void backup(ActionEvent event) {
-
+    void backup(ActionEvent event) throws IOException {
+        this.blackUnfocus.setOpacity(1);
+        this.blackUnfocus.setMouseTransparent(false);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui/backup.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root,535,245);
+        stage.setScene(scene);
+        stage.setTitle ("La mejorana");
+        stage.setResizable(false);
+        stage.showAndWait();
+        this.blackUnfocus.setOpacity(0);
+        ((Node)(event.getSource())).getScene().getWindow().hide();
     }
 
     @FXML
@@ -177,10 +191,15 @@ public class PrincipalCarController implements Initializable {
                 }
                 grid.add(anchorPane,column++,row);
                 //set grid width
-                if (row<1){
-                    grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-                    grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                    grid.setMaxWidth(Region.USE_PREF_SIZE);
+                if (row<1 && column!=3){
+                    if (column==2){
+                        grid.setMinWidth(800);
+                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxWidth(Region.USE_PREF_SIZE);
+                    }else{
+                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxWidth(Region.USE_PREF_SIZE);}
                 }
                 else {
                     grid.setMinWidth(1200);

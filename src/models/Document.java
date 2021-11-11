@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Document {
     private String id;
+    private String placa;
     private Date date;
     private Date dateOut;
     private String name;
@@ -11,8 +12,9 @@ public class Document {
     private String description;
     private boolean active;
 
-    public Document(String id, Date date, Date dateOut,String name, String img, String description, boolean active) {
+    public Document(String id, String placa, Date date, Date dateOut,String name, String img, String description, boolean active) {
         this.id = id;
+        this.placa=placa;
         this.date = date;
         this.dateOut=dateOut;
         this.name = name;
@@ -32,6 +34,14 @@ public class Document {
     }
 
     public Document() {
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 
     public String getId() {

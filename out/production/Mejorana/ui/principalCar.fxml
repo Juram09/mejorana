@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchor" maxHeight="600.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.PrincipalCarController">
+<AnchorPane fx:id="anchor" maxHeight="600.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logic.PrincipalCarController">
    <children>
       <BorderPane fx:id="border" layoutY="7.0" styleClass="transparent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -74,5 +74,10 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
+      <ImageView fx:id="blackUnfocus" fitHeight="748.0" fitWidth="1280.0" layoutY="-1.0" mouseTransparent="true" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/xd.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

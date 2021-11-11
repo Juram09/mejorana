@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="422.0" prefWidth="690.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.AddTanqController">
+<AnchorPane prefHeight="422.0" prefWidth="690.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logic.AddTanqController">
    <children>
       <ImageView fitHeight="439.0" fitWidth="690.0" pickOnBounds="true" preserveRatio="true">
          <image>

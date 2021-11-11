@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="226.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.OneConductorCardController">
+<AnchorPane prefHeight="226.0" prefWidth="380.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logic.OneConductorCardController">
    <children>
       <ImageView fitHeight="226.0" fitWidth="380.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0">
          <image>

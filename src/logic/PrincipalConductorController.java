@@ -1,6 +1,5 @@
 package logic;
 
-import com.sun.org.apache.xml.internal.security.Init;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,14 +12,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import models.Car;
 import models.Conductor;
-import models.carDAO;
 import models.conductorDAO;
 
 import java.io.IOException;
@@ -51,11 +49,26 @@ public class PrincipalConductorController implements Initializable{
     @FXML
     private Button bckupBtn;
 
+    @FXML
+    private ImageView blackUnfocus;
+
     private List<Conductor> conductors;
 
     @FXML
-    void backup(ActionEvent event) {
-
+    void backup(ActionEvent event) throws IOException {
+        this.blackUnfocus.setOpacity(1);
+        this.blackUnfocus.setMouseTransparent(false);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui/backup.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root,535,245);
+        stage.setScene(scene);
+        stage.setTitle ("La mejorana");
+        stage.setResizable(false);
+        stage.showAndWait();
+        this.blackUnfocus.setOpacity(0);
+        ((Node)(event.getSource())).getScene().getWindow().hide();
     }
 
     @FXML
@@ -113,7 +126,7 @@ public class PrincipalConductorController implements Initializable{
                     }
                     grid.add(anchorPane,column++,row);
                     //set grid width
-                    if (row<1){
+                    if (row<1 && column!=3){
                         if (column==2){
                             grid.setMinWidth(800);
                             grid.setPrefWidth(Region.USE_COMPUTED_SIZE);

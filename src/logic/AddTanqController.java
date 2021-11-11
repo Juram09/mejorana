@@ -27,19 +27,28 @@ public class AddTanqController {
    private Button addBtn;
 
    private String placa;
+   private Long actualKm;
 
    @FXML
    void addTanq(ActionEvent event) {
       if(Validate()){
          Tank tank=new Tank();
-         tank.setKm(Long.parseLong(kmTxt.getText()));
-         tank.setGalones(Long.parseLong(galonTxt.getText()));
+         tank.setKm(Long.parseLong(kmTxt.getText().replace(".","").replace(",","").replace(" ","").replace("\n","")));
+         tank.setGalones(Long.parseLong(galonTxt.getText().replace(".","").replace(",","").replace(" ","").replace("\n","")));
          carDAO dao= new carDAO();
          Tank tanq=dao.getTank(this.placa);
          try{
-            Long kmpGalon=((tank.getKm()-tanq.getKm())/tanq.getGalones());
-            dao.updateTank(tanq.getId(),kmpGalon);
+            if(tanq.getGalones()!=null){
+               Long kmpGalon=((tank.getKm()-tanq.getKm())/tanq.getGalones());
+               dao.updateTank(tanq.getId(),kmpGalon);
+            }
             dao.insertTank(tank, java.sql.Date.valueOf(dateTxt.getValue()), this.placa);
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Tanqueo agregado");
+            alert.setHeaderText(null);
+            alert.setContentText("El tanqueo se ha agregado correctamente");
+            alert.showAndWait();
          }catch(Exception e){
             Alert alert=new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -65,14 +74,20 @@ public class AddTanqController {
    private boolean Validate(){
       boolean valid=true;
       boolean numeric = true;
-
       try {
-         Double num = Double.parseDouble(this.galonTxt.getText());
-         Double nmbr = Double.parseDouble(this.kmTxt.getText());
+         Double num = Double.parseDouble(this.galonTxt.getText().replace(".","").replace(",","").replace(" ","").replace("\n",""));
+         Double nmbr = Double.parseDouble(this.kmTxt.getText().replace(".","").replace(",","").replace(" ","").replace("\n",""));
+         if(nmbr<this.actualKm){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No es posible agregar un kilometraje menor al kilometraje actual del vehiculo, es este caso "+this.actualKm);
+            alert.showAndWait();
+            valid=false;
+         }
       } catch (NumberFormatException e) {
          numeric = false;
       }
-
       if(this.kmTxt.getText().isEmpty() || this.galonTxt.getText().isEmpty() || !numeric || this.dateTxt.getValue()==null){
          Alert alert=new Alert(Alert.AlertType.ERROR);
          alert.setTitle("Error");
@@ -84,7 +99,8 @@ public class AddTanqController {
       return valid;
    }
 
-   public void setCar(String placa){
+   public void setCar(String placa, Long km){
       this.placa=placa;
+      this.actualKm=km;
    }
 }

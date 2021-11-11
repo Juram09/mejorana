@@ -12,15 +12,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import models.Document;
 import models.Maintenance;
-import logic.ViewMaintsController;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
 
 public class OneMaintCardController {
 
@@ -113,14 +109,14 @@ public class OneMaintCardController {
             }
             if(!maintenance.isActive()) {
                 nextLbl.setTextFill(Color.RED);
-                nextLbl.setText("Este documento no se encuentra activo");
+                nextLbl.setText("Este mantenimiento no se encuentra activo");
             }else{
                 nextLbl.setText("Faltan "+nxt+" km para el proximo mantenimiento de "+tipoLbl.getText());
             }
         }
         if(!maintenance.isActive()) {
             nextLbl.setTextFill(Color.RED);
-            nextLbl.setText("Este documento no se encuentra activo");
+            nextLbl.setText("Este mantenimiento no se encuentra activo");
         }
         return dateFormat.format(maintenance.getFecha());
     }

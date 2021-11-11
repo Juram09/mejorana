@@ -1,13 +1,14 @@
 package models;
 
 public class Images {
+    private String placa;
     private String frontal;
     private String trasera;
     private String latDer;
     private String latIzq;
     private String cabin;
 
-    public Images(String frontal, String trasera, String latDer, String latIzq, String cabin) {
+    public Images(String placa, String frontal, String trasera, String latDer, String latIzq, String cabin) {
         this.frontal = frontal;
         this.trasera = trasera;
         this.latDer = latDer;
@@ -16,6 +17,14 @@ public class Images {
     }
 
     public Images() {
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 
     public String getFrontal() {

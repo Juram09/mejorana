@@ -17,11 +17,8 @@ import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import logic.*;
-import models.Document;
 import models.Maintenance;
 import models.carDAO;
-import sun.applet.Main;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,7 +54,7 @@ public class ViewMaintsController {
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Actualización de datos");
             alert.setHeaderText(null);
-            alert.setContentText("¿Desea confirmar los cambios efectuados en los documentos?");
+            alert.setContentText("¿Desea confirmar los cambios efectuados en los mantenimientos?");
             ButtonType buttonTypeYes = new ButtonType("Sí");
             ButtonType buttonTypeNo = new ButtonType("No");
             ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
