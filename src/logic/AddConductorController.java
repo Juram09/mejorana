@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.Conductor;
 import models.conductorDAO;
+import org.postgresql.util.PSQLException;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -98,8 +100,8 @@ public class AddConductorController implements Initializable {
             conductor.setDocumento(this.tipoChoice.getValue());
             conductor.setNombre(this.nameTxt.getText().substring(0,1).toUpperCase()+this.nameTxt.getText().substring(1).toLowerCase());
             conductor.setApellido(this.lastnameTxt.getText().substring(0,1).toUpperCase()+this.lastnameTxt.getText().substring(1).toLowerCase());
-            conductor.setTelefono(Long.parseLong(this.phoneTxt.getText().replace(" ","").replace(".","").replace(",","").replace("\n","")));
-            conductor.setLicencia(Long.parseLong(this.licenseTxt.getText().replace(" ","").replace(".","").replace(",","").replace("\n","")));
+            conductor.setTelefono(Long.parseLong(this.phoneTxt.getText()));
+            conductor.setLicencia(Long.parseLong(this.licenseTxt.getText()));
             if(this.image!=null){
                String base = toBase().replace("\n", "").replace("\r", "");
                conductor.setImagen("data:image/jpeg;base64,"+base);
@@ -133,7 +135,6 @@ public class AddConductorController implements Initializable {
 
    private boolean checkDocument() {
       conductorDAO dao=new conductorDAO();
-      this.nitTxt.setText(this.nitTxt.getText().replace(" ","").replace("\n","").replace(".","").replace(",",""));
       List<Conductor> conductors= dao.getAll();
       for(int i=0;i<conductors.size();i++){
          if(conductors.get(i).getNit().equals(this.nitTxt.getText())){
@@ -145,15 +146,10 @@ public class AddConductorController implements Initializable {
 
    private boolean check(String text) {
       boolean bool= false;
-      Long x= Long.valueOf(0);
-      text=text.replace(" ","").replace(".","").replace(",","").replace("\n","");
       try{
-         x=Long.parseLong(text);
+         Long x=Long.parseLong(text);
       }catch (Exception e){
          bool=true;
-      }
-      if(x<1){
-         bool=false;
       }
       return bool;
    }

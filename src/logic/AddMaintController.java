@@ -1,5 +1,6 @@
 package logic;
 
+import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +13,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Maintenance;
 import sun.misc.BASE64Encoder;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public class AddMaintController implements Initializable{
 
     @FXML
-    private ChoiceBox<String> tipoCombo;
+    private ComboBox<String> tipoCombo;
 
     @FXML
     private TextField kmTxt;
@@ -67,11 +67,11 @@ public class AddMaintController implements Initializable{
         if(valid()){
             Maintenance maint=new Maintenance();
             maint.setTipo(tipoCombo.getValue());
-            maint.setKm(Long.parseLong(kmTxt.getText().replace(".","").replace(",","").replace(" ","").replace("\n","")));
+            maint.setKm(Long.parseLong(kmTxt.getText()));
             maint.setFecha(java.sql.Date.valueOf(datePicker.getValue()));
             maint.setDescripcion(descripcionTxt.getText());
             if (checkNext.isSelected()){
-                maint.setProx(Long.parseLong(kmTxt1.getText().replace(".","").replace(",","").replace(" ","").replace("\n","")));
+                maint.setProx(Long.parseLong(kmTxt1.getText()));
             }
             if(this.newImg){
                 String base = getImage().replace("\n", "").replace("\r", "");
@@ -124,8 +124,7 @@ public class AddMaintController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tipoCombo.getItems().add("Preventivo");
-        tipoCombo.getItems().add("Correctivo");
+        tipoCombo.getItems().add("Cambio de aceite");
         tipoCombo.setBackground(Background.EMPTY);
         tipoCombo.setStyle("-fx-font: 14px \"Century Gothic\";");
         datePicker.setStyle("-fx-font: 14px \"Century Gothic\";");
@@ -174,7 +173,7 @@ public class AddMaintController implements Initializable{
     private boolean isLong() {
         boolean xd=true;
         try{
-            xd=Long.parseLong(this.kmTxt1.getText().replace(".","").replace(",","").replace("\r","").replace("\n",""))>0 && Long.parseLong(this.kmTxt1.getText().replace(".","").replace(",","").replace("\r","").replace("\n",""))>0;
+            xd=Long.parseLong(this.kmTxt1.getText())>0 && Long.parseLong(this.kmTxt1.getText())>0;
         }catch (Exception e){
             xd=false;
         }

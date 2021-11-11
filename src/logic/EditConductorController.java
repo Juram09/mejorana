@@ -123,9 +123,9 @@ public class EditConductorController implements Initializable {
                 }
                 dao.update(conductor);
                 Alert alert=new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Conductor editado");
+                alert.setTitle("Conductor agregado");
                 alert.setHeaderText(null);
-                alert.setContentText("El conductor se ha editado exitosamente");
+                alert.setContentText("El conductor se ha agregado exitosamente");
                 alert.showAndWait();
             }
             catch (Exception e){
@@ -135,7 +135,7 @@ public class EditConductorController implements Initializable {
                 alert.setContentText("Error añadiendo el conductor");
                 alert.showAndWait();
             }finally{
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui/principalConductor.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/principalConductor.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
                 stage.initStyle(StageStyle.UNDECORATED);

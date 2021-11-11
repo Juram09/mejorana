@@ -36,34 +36,6 @@ public class carDAO {
         }
         return cars;
     }
-
-    public List<Car> getBackup(){
-        List<Car> cars=new ArrayList<>();
-        String sql="SELECT * FROM car;";
-        try{
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet data=statement.executeQuery();
-            while(data.next()){
-                Car car=new Car();
-                car.setPlaca(data.getString("placa"));
-                car.setKm(data.getLong("km"));
-                car.setColor(data.getString("color"));
-                car.setMarca(data.getString("marca"));
-                car.setModelo(data.getInt("modelo"));
-                car.setChasis(data.getString("chasis"));
-                car.setCapacidad(data.getInt("capacidad"));
-                car.setTipo(data.getString("tipo"));
-                car.setConductor(data.getString("conductor"));
-                cars.add(car);
-            }
-            data.close();
-            statement.close();
-        }catch(SQLException e){
-            logs.makeLog(e);
-        }
-        return cars;
-    }
-
     public Car getOne(String placa){
         Car car=new Car();
         String sql="SELECT * FROM car WHERE placa=?;";
@@ -175,34 +147,6 @@ public class carDAO {
     }
 
     //Document
-    public List<Document> getAllDocs(){
-        List<Document> docs=new ArrayList<>();
-        String sql="SELECT * FROM documento;";
-        try{
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet data=statement.executeQuery();
-            while(data.next()){
-                Document doc=new Document();
-                doc.setId(data.getString("id"));
-                doc.setName(data.getString("nombre"));
-                doc.setPlaca(data.getString("placa"));
-                doc.setDate(data.getDate("fecha_in"));
-                doc.setImg(data.getString("imagen"));
-                doc.setDescription(data.getString("descripcion"));
-                doc.setActive(data.getBoolean("active"));
-                if(data.getString("fecha_out")!=null){
-                    doc.setDateOut(data.getDate("fecha_out"));
-                }
-                docs.add(doc);
-            }
-            data.close();
-            statement.close();
-        }catch(SQLException e){
-            logs.makeLog(e);
-        }
-        return docs;
-    }
-
     public List<Document> getDocs(String placa){
         List<Document> docs=new ArrayList<>();
         String sql="SELECT * FROM documento WHERE placa=?;";
@@ -281,30 +225,7 @@ public class carDAO {
             logs.makeLog(e);
         }
     }
-
     //Observations
-    public List<Observation> getAllObs(){
-        List<Observation> observations=new ArrayList<>();
-        String sql="SELECT * FROM observacion;";
-        try{
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet data=statement.executeQuery();
-            while(data.next()){
-                Observation obs=new Observation();
-                obs.setId(data.getLong("id"));
-                obs.setPlaca(data.getString("placa"));
-                obs.setObservation(data.getString("observacion"));
-                obs.setDate(data.getDate("fecha"));
-                observations.add(obs);
-            }
-            data.close();
-            statement.close();
-        }catch(SQLException e){
-            logs.makeLog(e);
-        }
-        return observations;
-    }
-
     public List<Observation> getObs(String placa){
         List<Observation> observations=new ArrayList<>();
         String sql="SELECT id, fecha, observacion FROM observacion WHERE placa=?;";
@@ -354,30 +275,6 @@ public class carDAO {
     }
 
     //Tanks
-    public List<Tank> getAllTanks(){
-        List<Tank> tanks=new ArrayList<>();
-        String sql="SELECT * FROM tanqueo;";
-        try{
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet data=statement.executeQuery();
-            while(data.next()){
-                Tank tank=new Tank();
-                tank.setId(data.getLong("id"));
-                tank.setPlaca(data.getString("placa"));
-                tank.setFecha(data.getDate("fecha"));
-                tank.setKm(data.getLong("km"));
-                tank.setGalones(data.getLong("galones"));
-                tank.setGalonesPerKm(data.getLong("kmpgalon"));
-                tanks.add(tank);
-            }
-            data.close();
-            statement.close();
-        }catch(SQLException e){
-            logs.makeLog(e);
-        }
-        return tanks;
-    }
-
     public List<Tank> getTanks(String placa){
         List<Tank> tanks=new ArrayList<>();
         String sql="SELECT * FROM tanqueo WHERE placa=? ORDER BY id DESC LIMIT 20;";
@@ -409,7 +306,7 @@ public class carDAO {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, placa);
             ResultSet data=statement.executeQuery();
-            if(data.next()){
+            while(data.next()){
                 tank.setId(data.getLong("id"));
                 tank.setPlaca(placa);
                 tank.setKm(data.getLong("km"));
@@ -447,39 +344,13 @@ public class carDAO {
             statement.setLong(1, kmpgalon);
             statement.setLong(2, id);
             statement.execute();
+            statement.close();
         }catch(SQLException e){
             logs.makeLog(e);
         }
     }
 
     //Maintenance
-    public List<Maintenance> getAllMaints(){
-        List<Maintenance> maints=new ArrayList<>();
-        String sql="SELECT * FROM mantenimiento;";
-        try{
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet data=statement.executeQuery();
-            while(data.next()){
-                Maintenance maint=new Maintenance();
-                maint.setId(data.getLong("id"));
-                maint.setPlaca(data.getString("placa"));
-                maint.setKm(data.getLong("km"));
-                maint.setFecha(data.getDate("fecha"));
-                maint.setTipo(data.getString("tipo"));
-                maint.setImagen(data.getString("imagen"));
-                maint.setDescripcion(data.getString("descripcion"));
-                maint.setActive(data.getBoolean("active"));
-                maint.setProx(data.getLong("prox"));
-                maints.add(maint);
-            }
-            data.close();
-            statement.close();
-        }catch(SQLException e){
-            logs.makeLog(e);
-        }
-        return maints;
-    }
-
     public List<Maintenance> getMaints(String placa){
         List<Maintenance> maints=new ArrayList<>();
         String sql="SELECT * FROM mantenimiento WHERE placa=?;";
@@ -490,13 +361,12 @@ public class carDAO {
             while(data.next()){
                 Maintenance maint=new Maintenance();
                 maint.setId(data.getLong("id"));
-                maint.setKm(data.getLong("km"));
-                maint.setFecha(data.getDate("fecha"));
                 maint.setTipo(data.getString("tipo"));
-                maint.setImagen(data.getString("imagen"));
+                maint.setKm(data.getLong("km"));
+                maint.setProx(data.getLong("prox"));
+                maint.setFecha(data.getDate("fecha"));
                 maint.setDescripcion(data.getString("descripcion"));
                 maint.setActive(data.getBoolean("active"));
-                maint.setProx(data.getLong("prox"));
                 maints.add(maint);
             }
             data.close();

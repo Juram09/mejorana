@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane prefHeight="535.0" prefWidth="535.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logic.ViewAllMaintsController">
+<AnchorPane prefHeight="535.0" prefWidth="535.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.ViewAllMaintsController">
    <children>
       <BorderPane prefHeight="535.0" prefWidth="535.0">
          <top>

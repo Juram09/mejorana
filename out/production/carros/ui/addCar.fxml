@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.AddCarController">
+   <children>
+      <ImageView fx:id="Img" fitHeight="411.0" fitWidth="498.0" layoutX="14.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/carImgs.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/addCar.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="btnImg" fitHeight="115.0" fitWidth="134.0" layoutX="58.0" layoutY="463.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/frontalImg.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="addButton" layoutX="523.0" layoutY="644.0" mnemonicParsing="false" onAction="#add" opacity="0.01" prefHeight="51.0" prefWidth="742.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="menuButton" layoutY="5.0" mnemonicParsing="false" onAction="#goMenu" opacity="0.02" prefHeight="75.0" prefWidth="209.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="backButton" layoutX="1147.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBack" opacity="0.01" prefHeight="51.0" prefWidth="51.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="exitButton" layoutX="1217.0" layoutY="7.0" mnemonicParsing="false" onAction="#exit" opacity="0.01" prefHeight="51.0" prefWidth="51.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="carImgBtn" layoutX="14.0" layoutY="80.0" mnemonicParsing="false" onAction="#searchImg" opacity="0.01" prefHeight="374.0" prefWidth="498.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="frontalBtn" layoutX="57.0" layoutY="462.0" mnemonicParsing="false" onAction="#selectFrontal" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="traseraBtn" layoutX="196.0" layoutY="462.0" mnemonicParsing="false" onAction="#selectTrasera" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="izqBtn" layoutX="333.0" layoutY="462.0" mnemonicParsing="false" onAction="#selectIzq" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="derBtn" layoutX="126.0" layoutY="577.0" mnemonicParsing="false" onAction="#selectDer" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="cabinaBtn" layoutX="263.0" layoutY="577.0" mnemonicParsing="false" onAction="#selectCabina" opacity="0.01" prefHeight="115.0" prefWidth="134.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="addConductorBtn" layoutX="1083.0" layoutY="339.0" mnemonicParsing="false" onAction="#addConductor" opacity="0.01" prefHeight="25.0" prefWidth="172.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="addDocumentBtn" layoutX="915.0" layoutY="440.0" mnemonicParsing="false" onAction="#addDocument" opacity="0.0" prefHeight="35.0" prefWidth="340.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Label layoutX="927.0" layoutY="500.0" prefHeight="25.0" prefWidth="320.0">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="927.0" layoutY="550.0" prefHeight="25.0" prefWidth="320.0">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="927.0" layoutY="597.0" prefHeight="25.0" prefWidth="320.0">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="nombreLbl" layoutX="1100.0" layoutY="202.0" prefHeight="15.0" prefWidth="154.0">
+         <font>
+            <Font name="Century Gothic" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="apellidoLbl" layoutX="1100.0" layoutY="244.0" prefHeight="15.0" prefWidth="154.0">
+         <font>
+            <Font name="Century Gothic" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="telefonoLbl" layoutX="1100.0" layoutY="283.0" prefHeight="15.0" prefWidth="154.0">
+         <font>
+            <Font name="Century Gothic" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="licenciaLbl" layoutX="1100.0" layoutY="319.0" prefHeight="15.0" prefWidth="154.0">
+         <font>
+            <Font name="Century Gothic" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="placaTxt" layoutX="543.0" layoutY="151.0" prefHeight="25.0" prefWidth="333.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="kmTxt" layoutX="543.0" layoutY="216.0" prefHeight="25.0" prefWidth="333.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="colorTxt" layoutX="543.0" layoutY="277.0" prefHeight="25.0" prefWidth="333.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="marcaTxt" layoutX="543.0" layoutY="342.0" prefHeight="25.0" prefWidth="333.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="modeloTxt" layoutX="543.0" layoutY="404.0" prefHeight="25.0" prefWidth="333.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="chasisTxt" layoutX="543.0" layoutY="465.0" prefHeight="25.0" prefWidth="333.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="capacidadTxt" layoutX="543.0" layoutY="527.0" prefHeight="25.0" prefWidth="333.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="tipoTxt" layoutX="543.0" layoutY="587.0" prefHeight="25.0" prefWidth="333.0" styleClass="transparent">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </TextField>
+      <ChoiceBox fx:id="choiceConductor" layoutX="927.0" layoutY="144.0" prefHeight="35.0" prefWidth="320.0" styleClass="transparent" />
+      <Circle fx:id="circleImg" fill="WHITE" layoutX="1005.0" layoutY="266.0" opacity="0.01" radius="84.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.1" />
+      <ImageView fx:id="blackUnfocus" fitHeight="748.0" fitWidth="1280.0" layoutY="-1.0" mouseTransparent="true" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/xd.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -16,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -27,6 +29,7 @@ import models.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -131,11 +134,12 @@ public class OneCarSecondController{
       stage.setTitle("La mejorana");
       stage.setResizable(false);
       AddTanqController controller =fxmlLoader.getController();
-      controller.setCar(this.placaLbl.getText(),this.actualKm);
+      controller.setCar(this.placaLbl.getText());
       stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
       stage.initModality(Modality.WINDOW_MODAL);
       stage.showAndWait();
       this.blackUnfocus.setOpacity(0);
+      this.setCar(this.placaLbl.getText(),this.actualKm);
    }
 
    @FXML
@@ -145,7 +149,7 @@ public class OneCarSecondController{
          this.obsTxt.setText("");
          this.update();
          Alert alert=new Alert(Alert.AlertType.INFORMATION);
-         alert.setTitle("Observación agregada");
+         alert.setTitle("Conductor agregado");
          alert.setHeaderText(null);
          alert.setContentText("La observación se ha agregado exitosamente");
          alert.showAndWait();

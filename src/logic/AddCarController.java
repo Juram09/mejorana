@@ -181,7 +181,7 @@ public class AddCarController implements Initializable {
     }
 
     private String format() {
-        String placa=this.placaTxt.getText().replace("\n", "").replace(" ", "").replace("-","");
+        String placa=this.placaTxt.getText().replace("\n", "").replace("\r", "").replace("-","");
         placa=placa.toUpperCase();
         return placa;
     }
@@ -416,14 +416,14 @@ public class AddCarController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Solo se aceptan números en los campos de kilometraje, modelo y capacidad");
             alert.showAndWait();
-        }else if(checkDocument()) {
+        }/*else if(checkDocument()) {
             valid=false;
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText("Ya existe un automovil registrado con esta placa");
             alert.showAndWait();
-        }
+        }*/
         return valid;
     }
 
@@ -440,15 +440,10 @@ public class AddCarController implements Initializable {
 
     private boolean check(String text) {
         boolean bool= false;
-        Long x= Long.valueOf(0);
-        text=text.replace(" ","").replace(".","").replace(",","").replace("\n","");
         try{
-            x=Long.parseLong(text);
+            Long x=Long.parseLong(text);
         }catch (Exception e){
             bool=true;
-        }
-        if(x<1){
-            bool=false;
         }
         return bool;
     }

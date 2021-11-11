@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class Maintenance {
     Long id;
-    String placa;
     Long km;
     Long prox = Long.parseLong("0");
     Date fecha;
@@ -13,9 +12,8 @@ public class Maintenance {
     String descripcion;
     boolean active;
 
-    public Maintenance(Long id, String placa, Long km, Long prox, Date fecha, String tipo, String imagen, String descripcion, boolean active) {
+    public Maintenance(Long id, Long km, Long prox, Date fecha, String tipo, String imagen, String descripcion, boolean active) {
         this.id = id;
-        this.placa=placa;
         this.km = km;
         this.prox=prox;
         this.fecha = fecha;
@@ -45,14 +43,6 @@ public class Maintenance {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPlaca() {
-        return placa;
-    }
-
-    public void setPlaca(String placa) {
-        this.placa = placa;
     }
 
     public Long getKm() {

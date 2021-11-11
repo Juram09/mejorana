@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minWidth="380.0" prefHeight="226.0" prefWidth="380.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logic.OneCarCardController">
+<AnchorPane minWidth="380.0" prefHeight="226.0" prefWidth="380.0" styleClass="transparent" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.OneCarCardController">
    <children>
       <ImageView fitHeight="243.0" fitWidth="357.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0">
          <image>
