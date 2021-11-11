@@ -21,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.*;
+import logic.ViewMaintsController;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -129,7 +130,7 @@ public class OneCarController{
         stage.setTitle("La mejorana");
         stage.setResizable(false);
         AddTanqController controller =fxmlLoader.getController();
-        controller.setCar(this.placasLabel.getText(), Long.valueOf(this.kmLabel.getText()));
+        controller.setCar(this.placasLabel.getText());
         stage.initOwner(((Node) (event.getSource())).getScene().getWindow());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.showAndWait();
@@ -262,7 +263,6 @@ public class OneCarController{
             tipoLabel.setText(car.getTipo());
             show(car.getImgs().getFrontal());
             List<Tank> tanks=dao.getTanks(this.placa);
-            grafica.getData().clear();
             XYChart.Series series=new XYChart.Series();
             for(int i=tanks.size()-1;i>0;i--){
                 series.getData().add(new XYChart.Data<>(dateFormat.format(tanks.get(i).getFecha()),tanks.get(i).getGalonesPerKm()));
@@ -270,11 +270,10 @@ public class OneCarController{
             series.setName("Galones por km recorrido");
             grafica.getData().addAll(series);
         }catch(Exception e){
-            e.printStackTrace();
             Alert alert=new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("Error cargando el automovil seleccionado");
+            alert.setContentText("Error cargando el automovil seleccionada");
             alert.showAndWait();
         }
     }

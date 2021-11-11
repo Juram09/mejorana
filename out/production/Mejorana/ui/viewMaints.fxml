@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane prefHeight="535.0" prefWidth="535.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logic.ViewMaintsController">
+<AnchorPane prefHeight="535.0" prefWidth="535.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.ViewMaintsController">
    <children>
       <BorderPane prefHeight="535.0" prefWidth="535.0">
          <top>

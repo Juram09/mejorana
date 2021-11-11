@@ -12,13 +12,12 @@ public class logs {
       FileHandler fh;
       try {
          SimpleDateFormat format = new SimpleDateFormat("M-d_HH-mm-ss");
-         fh = new FileHandler(""+logs.class.getClassLoader().getResource("./logs/logs.log"),true);
+         fh = new FileHandler("logs/logs.log",true);
          logger.addHandler(fh);
          SimpleFormatter formatter = new SimpleFormatter();
          fh.setFormatter(formatter);
          logger.info("Log: "+exception);
       } catch (Exception e) {
-         e.printStackTrace();
          logger.info("Log making log: "+e);
       }
    }

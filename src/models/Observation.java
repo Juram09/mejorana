@@ -4,13 +4,11 @@ import java.util.Date;
 
 public class Observation {
    private Long id;
-   private String placa;
    private Date date;
    private String observation;
 
-   public Observation(Long id, String placa, Date date, String observation) {
+   public Observation(Long id,Date date, String observation) {
       this.id=id;
-      this.placa=placa;
       this.date = date;
       this.observation = observation;
    }
@@ -24,14 +22,6 @@ public class Observation {
 
    public void setId(Long id) {
       this.id = id;
-   }
-
-   public String getPlaca() {
-      return placa;
-   }
-
-   public void setPlaca(String placa) {
-      this.placa = placa;
    }
 
    public Date getDate() {

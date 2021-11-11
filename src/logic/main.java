@@ -8,13 +8,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.FileNotFoundException;
 import java.sql.*;
 
 public class main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/principalCar.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../ui/principalCar.fxml"));
         primaryStage.setTitle("La Mejorana");
         primaryStage.setResizable(false);
         primaryStage.initStyle(StageStyle.UNDECORATED);
@@ -22,28 +23,32 @@ public class main extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) throws SQLException{
+
+    public static void main(String[] args) throws SQLException, FileNotFoundException {
         createDatabase();
         launch(args);
     }
 
-    private static void createDatabase() throws SQLException {
+    private static void createDatabase() throws SQLException, FileNotFoundException {
         Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/", "postgres", "admin");
-        String sql="SELECT 'CREATE DATABASE mejorana' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'mejorana')";
+        String sql="SELECT 'CREATE DATABASE mejorana1' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'mejorana1')";
         PreparedStatement statement = c.prepareStatement(sql);
         ResultSet data=statement.executeQuery();
         if(data.next()){
-            sql="CREATE DATABASE mejorana WITH OWNER = postgres ENCODING = 'UTF8' CONNECTION LIMIT = -1;";
+            sql="CREATE DATABASE mejorana1 WITH OWNER = postgres ENCODING = 'UTF8' CONNECTION LIMIT = -1;";
             PreparedStatement statement1 = c.prepareStatement(sql);
             statement1.execute();
+            System.out.println("Creado");
             statement1.close();
             data.close();
             statement.close();
             createTables();
+        }else{
+            System.out.println("Noup");
         }
     }
 
-    private static void createTables() throws SQLException {
+    private static void createTables() throws FileNotFoundException, SQLException {
         Connection connection = new DBConnection().getConnection();
         String sql="--\n" +
                 "-- PostgreSQL database dump\n" +
@@ -52,7 +57,7 @@ public class main extends Application {
                 "-- Dumped from database version 13.3\n" +
                 "-- Dumped by pg_dump version 13.3\n" +
                 "\n" +
-                "-- Started on 2021-11-05 22:20:20\n" +
+                "-- Started on 2021-11-04 23:28:23\n" +
                 "\n" +
                 "SET statement_timeout = 0;\n" +
                 "SET lock_timeout = 0;\n" +
@@ -399,14 +404,24 @@ public class main extends Application {
                 "    ADD CONSTRAINT tanq_car FOREIGN KEY (placa) REFERENCES public.car(placa) ON DELETE CASCADE;\n" +
                 "\n" +
                 "\n" +
-                "-- Completed on 2021-11-05 22:20:20\n" +
+                "-- Completed on 2021-11-04 23:28:23\n" +
                 "\n" +
                 "--\n" +
                 "-- PostgreSQL database dump complete\n" +
-                "--\n" +
-                "\n";
+                "--\n";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.execute();
+        System.out.println("Creado");
         statement.close();
+
+        /*
+        System.out.println("Connection established......");
+        //Initialize the script runner
+        ScriptRunner sr = new ScriptRunner(connection);
+        //Creating a reader object
+        Reader reader = new BufferedReader(new FileReader("E:\\Proyectos\\carros\\src\\database\\xd.sql"));
+        //Running the script
+        sr.runScript(reader);*/
+
     }
 }
